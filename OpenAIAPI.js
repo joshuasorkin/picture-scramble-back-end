@@ -18,7 +18,7 @@ class OpenAIAPI {
         max_tokens: 10,
       });
       console.log({response});
-      let word = response.choices[0].text.trim();
+      let word = response.choices[0].message.content.trim();
       // Additional logic to ensure the word meets your criteria
       console.log("generateWord:",{word});
       return word;
