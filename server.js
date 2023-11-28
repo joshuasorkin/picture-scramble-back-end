@@ -1,10 +1,10 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import { generateWord, generatePicture } from './OpenAIAPI.js'; // Adjust this import based on your implementation
+import OpenAIAPI from './OpenAIAPI.js'; // Adjust this import based on your implementation
 import dotenv from 'dotenv';
 dotenv.config();
 
-
+const OpenAIAPI_obj = new OpenAIAPI();
 const app = express();
 app.use(express.json());
 
@@ -57,8 +57,8 @@ const findMismatches = (solution, playerSolution) => {
 
 app.get('/new-game', async (req, res) => {
     try {
-      const word = await generateWord();
-      const picture = await generatePicture(word);
+      const word = await OpenAIAPI.generateWord();
+      const picture = await OpenAIAPI.generatePicture(word);
       const scramble = scrambleWord(word);
   
       const newGame = new Game({ solution: word, scramble, picture });
