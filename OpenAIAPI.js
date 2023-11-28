@@ -15,7 +15,7 @@ class OpenAIAPI {
         max_tokens: 10,
       });
 
-      let word = response.data.choices[0].text.trim();
+      let word = response.choices[0].text.trim();
       // Additional logic to ensure the word meets your criteria
       return word;
     } catch (error) {
@@ -26,14 +26,14 @@ class OpenAIAPI {
 
   async generatePicture(word) {
     try {
-      const response = await this.client.createImage({
+      const response = await this.client.images.generate({
         model: "dall-e-3", // Replace with the appropriate model
         prompt: `Generate a picture of ${word}.`,
         n: 1, // Number of images to generate
         size: "1024x1024" // Image size
       });
 
-      let picture = response.data.data[0].url; // URL of the generated image
+      let picture = response.data[0].url; // URL of the generated image
       return picture;
     } catch (error) {
       console.error('Error generating picture:', error);
