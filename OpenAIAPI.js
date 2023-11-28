@@ -1,16 +1,15 @@
-import { Configuration, OpenAIApi } from "openai";
+import OpenAI from "openai";
 
 class OpenAIAPI {
   constructor() {
-    const configuration = new Configuration({
+    this.client = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY, // Your OpenAI API Key
     });
-    this.client = new OpenAIApi(configuration);
   }
 
   async generateWord() {
     try {
-      const response = await this.client.createCompletion({
+      const response = await this.client.chat.completions.create({
         model: "gpt-3.5-turbo", // Or another suitable model
         prompt: "Generate a random English language word between 4 to 10 characters in length.",
         max_tokens: 10,
