@@ -12,7 +12,9 @@ class OpenAIAPI {
       console.log("generating word...");
       const response = await this.client.chat.completions.create({
         model: "gpt-3.5-turbo", // Or another suitable model
-        prompt: "Generate a random English language word between 4 to 10 characters in length.",
+        messages: [
+          {role:"user",content:"Generate a random English language word between 4 to 10 characters in length."}
+        ],
         max_tokens: 10,
       });
       console.log({response});
