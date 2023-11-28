@@ -57,8 +57,11 @@ const findMismatches = (solution, playerSolution) => {
 
 app.get('/new-game', async (req, res) => {
     try {
-      const word = await OpenAIAPI.generateWord();
-      const picture = await OpenAIAPI.generatePicture(word);
+        console.log("starting new game...");
+      const word = await OpenAIAPI_obj.generateWord();
+      console.log({word});
+      const picture = await OpenAIAPI_obj.generatePicture(word);
+      console.log({picture});
       const scramble = scrambleWord(word);
   
       const newGame = new Game({ solution: word, scramble, picture });
