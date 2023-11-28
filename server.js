@@ -38,7 +38,21 @@ const scrambleWord = (word) => {
     
   
 const findMismatches = (solution, playerSolution) => {
-// Implement logic to find mismatches here
+    const mismatches = [];
+    const minLength = Math.min(solution.length, playerSolution.length);
+
+    for (let i = 0; i < minLength; i++) {
+        if (solution[i] !== playerSolution[i]) {
+            mismatches.push(i);
+        }
+    }
+
+    // If playerSolution is longer than solution, mark the extra characters as mismatches
+    for (let i = minLength; i < playerSolution.length; i++) {
+        mismatches.push(i);
+    }
+
+    return mismatches;
 };
 
 app.get('/new-game', async (req, res) => {
