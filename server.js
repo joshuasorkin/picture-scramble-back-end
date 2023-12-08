@@ -76,7 +76,7 @@ app.get('/new-game', async (req, res) => {
     }
 });
 
-app.get('/check-answer', async (req, res) => {
+app.get('/check-game', async (req, res) => {
     const { playerSolution, gameId } = req.query;
   
     try {
