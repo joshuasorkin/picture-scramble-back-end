@@ -77,15 +77,15 @@ app.get('/new-game', async (req, res) => {
 });
 
 app.get('/check-game', async (req, res) => {
-    const { playerSolution, gameId } = req.query;
-  
+    const { gameId, playerSolution } = req.query;
+    console.log({playerSolution});
     try {
       const game = await Game.findById(gameId);
+      console.log({game});
       if (!game) {
         res.status(404).send('Game not found');
         return;
       }
-  
       const checkResult = game.solution === playerSolution;
       let mismatches = [];
       if (!checkResult) {
