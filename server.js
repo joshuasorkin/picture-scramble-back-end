@@ -91,7 +91,8 @@ app.get('/check-game', async (req, res) => {
       if (!checkResult) {
         mismatches = findMismatches(game.solution, playerSolution);
       }
-  
+      console.log({checkResult});
+      console.log({mismatches});
       res.send({ checkResult, mismatches });
     } catch (error) {
       res.status(500).send('Error checking answer');
