@@ -62,6 +62,7 @@ app.get('/new-game', async (req, res) => {
     try {
         console.log("starting new game...");
       const wordAndPicture = await OpenAIAPI_obj.generateWordAndPictureUntilSuccess();
+      console.log({wordAndPicture});
       const word = wordAndPicture.word;
       const picture = wordAndPicture.picture;
       const scramble = scrambleWord(word);
