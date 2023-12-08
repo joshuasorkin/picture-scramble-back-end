@@ -13,9 +13,9 @@ class OpenAIAPI {
     let picture;
     while(!success){
       try{
-        const word = await OpenAIAPI_obj.generateWord();
+        const word = await this.generateWord();
         console.log({word});
-        const picture = await OpenAIAPI_obj.generatePicture(word);
+        const picture = await this.generatePicture(word);
         console.log({picture});
         success = true;
       }
