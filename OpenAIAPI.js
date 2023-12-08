@@ -7,6 +7,25 @@ class OpenAIAPI {
     });
   }
 
+  async generateWordAndPictureUntilSuccess(){
+    let success = false;
+    let word;
+    let picture;
+    while(!success){
+      try{
+        const word = await OpenAIAPI_obj.generateWord();
+        console.log({word});
+        const picture = await OpenAIAPI_obj.generatePicture(word);
+        console.log({picture});
+        success = true;
+      }
+      catch(error){
+        console.log("word+picture generation failed, trying again...");
+      }
+    }
+    return {word,picture};
+  }
+
   async generateWord() {
     try {
       console.log("generating word...");
