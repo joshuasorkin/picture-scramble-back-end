@@ -20,6 +20,7 @@ class OpenAIAPI {
         success = true;
       }
       catch(error){
+        console.error("Error generating word and picture:",error);
         console.log("word+picture generation failed, trying again...");
       }
     }
