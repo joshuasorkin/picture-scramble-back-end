@@ -37,6 +37,7 @@ class OpenAIAPI {
       const prompt = topicParam ?
         process.env.GENERATE_WORD_PROMPT_TOPIC.replace('{}',topicParam) :
         process.env.GENERATE_WORD_PROMPT;
+      console.log({prompt});
       const response = await this.client.chat.completions.create({
         model: "gpt-3.5-turbo", // Or another suitable model
         messages: [

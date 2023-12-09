@@ -69,7 +69,7 @@ const findMismatches = (solution, playerSolution) => {
 app.get('/new-game/:topic?', async (req, res) => {
     try {
       console.log("starting new game...");
-      const wordParam = req.params.topic;
+      const topicParam = req.params.topic;
       const wordAndPicture = topicParam?
         await OpenAIAPI_obj.generateWordAndPictureUntilSuccess(topicParam) :
         await OpenAIAPI_obj.generateWordAndPictureUntilSuccess();
