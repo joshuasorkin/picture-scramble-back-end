@@ -66,10 +66,13 @@ const findMismatches = (solution, playerSolution) => {
     return mismatches;
 };
 
-app.get('/new-game', async (req, res) => {
+app.get('/new-game/:topic?', async (req, res) => {
     try {
-        console.log("starting new game...");
-      const wordAndPicture = await OpenAIAPI_obj.generateWordAndPictureUntilSuccess();
+      console.log("starting new game...");
+      const wordParam = req.params.topic;
+      const wordAndPicture = topicParam?
+        await OpenAIAPI_obj.generateWordAndPictureUntilSuccess(topicParam) :
+        await OpenAIAPI_obj.generateWordAndPictureUntilSuccess();
       console.log({wordAndPicture});
       const word = wordAndPicture.word;
       const picture = wordAndPicture.picture;

@@ -7,13 +7,13 @@ class OpenAIAPI {
     });
   }
 
-  async generateWordAndPictureUntilSuccess(){
+  async generateWordAndPictureUntilSuccess(wordParam = null){
     let success = false;
     let word;
     let picture;
     while(!success){
       try{
-        word = await this.generateWord();
+        word = await this.generateWord(wordParam);
         console.log({word});
         picture = await this.generatePicture(word);
         console.log({picture});
@@ -31,14 +31,16 @@ class OpenAIAPI {
     return result;
   }
 
-  async generateWord() {
+  async generateWord(topicParam) {
     try {
       console.log("generating word...");
-      
+      const prompt = topicParam ?
+        process.env.GENERATE_WORD_PROMPT_TOPIC.replace('{}',topicParam) :
+        process.env.GENERATE_WORD_PROMPT;
       const response = await this.client.chat.completions.create({
         model: "gpt-3.5-turbo", // Or another suitable model
         messages: [
-          {role:"user",content:process.env.GENERATE_WORD_PROMPT}
+          {role:"user",content:prompt}
         ],
         max_tokens: 10,
       });
