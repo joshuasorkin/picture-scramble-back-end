@@ -18,7 +18,10 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 const gameSchema = new mongoose.Schema({
   solution: String,
   scramble: String,
-  picture: String
+  picture: String,
+  date_create: Date,
+  date_solve: Date,
+  topic: String
 });
 const Game = mongoose.model('Game', gameSchema);
 
