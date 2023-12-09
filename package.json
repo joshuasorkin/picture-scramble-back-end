@@ -17,5 +17,8 @@
     "mongodb": "^6.3.0",
     "mongoose": "^8.0.1",
     "openai": "^4.20.1"
+  },
+  "devDependencies": {
+    "@flydotio/dockerfile": "^0.4.11"
   }
 }
