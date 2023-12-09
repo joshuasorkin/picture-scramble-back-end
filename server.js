@@ -22,6 +22,14 @@ const gameSchema = new mongoose.Schema({
 });
 const Game = mongoose.model('Game', gameSchema);
 
+const scramblePhrase = (phrase) => {
+  const phraseArray = phrase.split(' ');
+  for(let x=0;x<phraseArray.length;x++){
+    phraseArray[x] = scrambleWord(phraseArray[x]);
+  }
+  return phraseArray.join(' ');
+}
+
 const scrambleWord = (word) => {
         // Convert the word into an array of characters
         let characters = word.split('');
@@ -65,7 +73,8 @@ app.get('/new-game', async (req, res) => {
       console.log({wordAndPicture});
       const word = wordAndPicture.word;
       const picture = wordAndPicture.picture;
-      const scramble = scrambleWord(word);
+      //const scramble = scrambleWord(word);
+      const scramble = 
       const newGame = new Game({ solution: word, scramble, picture });
       await newGame.save();
   
