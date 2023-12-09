@@ -74,7 +74,7 @@ app.get('/new-game', async (req, res) => {
       const word = wordAndPicture.word;
       const picture = wordAndPicture.picture;
       //const scramble = scrambleWord(word);
-      const scramble = 
+      const scramble = scramblePhrase(word);
       const newGame = new Game({ solution: word, scramble, picture });
       await newGame.save();
   
