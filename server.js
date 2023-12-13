@@ -113,7 +113,10 @@ app.get('/check-game', async (req, res) => {
     }
 });
 
+//retrieve the document for a game with a given ID
+app.get('/game/:id',async(req,res) => {
 
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

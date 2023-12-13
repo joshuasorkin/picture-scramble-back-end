@@ -60,7 +60,7 @@ class OpenAIAPI {
     try {
       const response = await this.client.images.generate({
         model: "dall-e-3", // Replace with the appropriate model
-        prompt:`Generate a picture of ${word}, photorealistic.  Do not include the word '${word}' in the picture.`,
+        prompt:`Generate a picture of ${word}, photorealistic.  Do not include the word '${word}' in the picture. Do not include any text in the picture.`,
         n: 1, // Number of images to generate
         size: "1024x1024" // Image size
       });
