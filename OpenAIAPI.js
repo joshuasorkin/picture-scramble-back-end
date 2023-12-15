@@ -42,17 +42,16 @@ class OpenAIAPI {
   async generateWord(topicParam,score = 0) {
     try {
       console.log("generating word...");
-      const prompt = (topicParam) => {
-        if (topicParam){
-          return process.env.GENERATE_WORD_PROMPT_TOPIC.replace('{}',topicParam);
+      let prompt;
+      if (topicParam){
+        prompt = process.env.GENERATE_WORD_PROMPT_TOPIC.replace('{}',topicParam);
+      }
+      else{
+        if(this.chance(score)){
+          prompt = process.env.GENERATE_WORD_PROMPT_CONCRETE;
         }
         else{
-          if(this.chance(score)){
-            return process.env.GENERATE_WORD_PROMPT_CONCRETE;
-          }
-          else{
-            return process.env.GENERATE_WORD_PROMPT_ABSTRACT;
-          }
+          prompt = process.env.GENERATE_WORD_PROMPT_ABSTRACT;
         }
       }
       console.log({prompt});
