@@ -82,7 +82,7 @@ app.get('/new-game', async (req, res) => {
         wordAndPicture = await OpenAIAPI_obj.generateWordAndPictureUntilSuccess(topicParam)
       }
       else{ 
-        wordAndPicture = await OpenAIAPI_obj.generateWordAndPictureUntilSuccess(null,score);
+        wordAndPicture = await OpenAIAPI_obj.generateWordAndPictureUntilSuccess(null,scoreParam);
       }
       console.log({wordAndPicture});
       const word = wordAndPicture.word;
@@ -99,6 +99,7 @@ app.get('/new-game', async (req, res) => {
   
       res.send({ gameId: newGame._id, scramble, picture });
     } catch (error) {
+      console.error(error);
       res.status(500).send('Error creating new game');
     }
 });

@@ -7,7 +7,8 @@ class OpenAIAPI {
     });
   }
 
-  async generateWordAndPictureUntilSuccess(wordParam = null,score = 0){
+  async generateWordAndPictureUntilSuccess(wordParam = null,score){
+    console.log("starting generation");
     console.log({score});
     let success = false;
     let word;
