@@ -7,13 +7,13 @@ class OpenAIAPI {
     });
   }
 
-  async generateWordAndPictureUntilSuccess(wordParam = null){
+  async generateWordAndPictureUntilSuccess(wordParam = null,score = 0){
     let success = false;
     let word;
     let picture;
     while(!success){
       try{
-        word = await this.generateWord(wordParam);
+        word = await this.generateWord(wordParam,score);
         console.log({word});
         picture = await this.generatePicture(word);
         console.log({picture});
@@ -39,7 +39,7 @@ class OpenAIAPI {
     return result === num;
   }
 
-  async generateWord(topicParam,score = 25) {
+  async generateWord(topicParam,score = 0) {
     try {
       console.log("generating word...");
       let prompt;
