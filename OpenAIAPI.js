@@ -39,7 +39,7 @@ class OpenAIAPI {
     return result === num;
   }
 
-  async generateWord(topicParam,score = 0) {
+  async generateWord(topicParam,score = 25) {
     try {
       console.log("generating word...");
       let prompt;
