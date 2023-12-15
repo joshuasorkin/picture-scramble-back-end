@@ -8,6 +8,7 @@ class OpenAIAPI {
   }
 
   async generateWordAndPictureUntilSuccess(wordParam = null,score = 0){
+    console.log({score});
     let success = false;
     let word;
     let picture;
