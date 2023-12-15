@@ -82,7 +82,7 @@ app.get('/new-game', async (req, res) => {
         wordAndPicture = await OpenAIAPI_obj.generateWordAndPictureUntilSuccess(topicParam)
       }
       else{ 
-        wordAndPicture = await OpenAIAPI_obj.generateWordAndPictureUntilSuccess(score = scoreParam);
+        wordAndPicture = await OpenAIAPI_obj.generateWordAndPictureUntilSuccess(null,score);
       }
       console.log({wordAndPicture});
       const word = wordAndPicture.word;
