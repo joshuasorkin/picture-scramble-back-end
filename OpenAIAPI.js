@@ -34,9 +34,11 @@ class OpenAIAPI {
   }
 
   chance(num) {
+
+    num = parseInt(num);
     // Generate a random integer between 0 and num (inclusive)
     const result = Math.floor(Math.random() * (num + 1));
-  
+    console.log("chance:",{num},"result:",{result})
     // Check if the result is equal to num and return the boolean value
     return result === num;
   }
