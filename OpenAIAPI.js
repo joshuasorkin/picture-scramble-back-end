@@ -31,12 +31,30 @@ class OpenAIAPI {
     return result;
   }
 
-  async generateWord(topicParam) {
+  chance(num) {
+    // Generate a random integer between 0 and num (inclusive)
+    const result = Math.floor(Math.random() * (num + 1));
+  
+    // Check if the result is equal to num and return the boolean value
+    return result === num;
+  }
+
+  async generateWord(topicParam,score = 0) {
     try {
       console.log("generating word...");
-      const prompt = topicParam ?
-        process.env.GENERATE_WORD_PROMPT_TOPIC.replace('{}',topicParam) :
-        process.env.GENERATE_WORD_PROMPT;
+      const prompt = (topicParam) => {
+        if (topicParam){
+          return process.env.GENERATE_WORD_PROMPT_TOPIC.replace('{}',topicParam);
+        }
+        else{
+          if(this.chance(score)){
+            return process.env.GENERATE_WORD_PROMPT_CONCRETE;
+          }
+          else{
+            return process.env.GENERATE_WORD_PROMPT_ABSTRACT;
+          }
+        }
+      }
       console.log({prompt});
       const response = await this.client.chat.completions.create({
         model: "gpt-3.5-turbo", // Or another suitable model
