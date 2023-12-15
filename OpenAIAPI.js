@@ -60,7 +60,7 @@ class OpenAIAPI {
     try {
       const response = await this.client.images.generate({
         model: "dall-e-3", // Replace with the appropriate model
-        prompt:`Generate a picture of ${word}, photorealistic.  Do not include the word '${word}' in the picture. Do not include any text in the picture.`,
+        prompt:`Generate a picture of ${word}, in a random historical art style.  Do not include the word '${word}' in the picture. Do not include any text in the picture.`,
         n: 1, // Number of images to generate
         size: "1024x1024" // Image size
       });
@@ -72,6 +72,31 @@ class OpenAIAPI {
       throw error;
     }
   }
+
+  async generateCompliment(word) {
+    try {
+      console.log("generating compliment...");
+      const prompt = process.env.GENERATE_COMPLIMENT.replace('{}',word);
+      console.log({prompt});
+      const response = await this.client.chat.completions.create({
+        model: "gpt-3.5-turbo", // Or another suitable model
+        messages: [
+          {role:"user",content:prompt}
+        ],
+        max_tokens: 10,
+      });
+      console.log({response});
+      let compliment = response.choices[0].message.content;
+      // Additional logic to ensure the word meets your criteria
+      console.log("generateCompliment:",{compliment});
+      return compliment;
+    } catch (error) {
+      console.error('Error generating compliment:', error);
+      throw error;
+    }
+  }
 }
+
+
 
 export default OpenAIAPI;

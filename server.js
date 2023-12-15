@@ -21,7 +21,8 @@ const gameSchema = new mongoose.Schema({
   picture: String,
   date_create: Date,
   date_solve: Date,
-  topic: String
+  topic: String,
+  compliment: String
 });
 const Game = mongoose.model('Game', gameSchema);
 
@@ -79,9 +80,14 @@ app.get('/new-game/:topic?', async (req, res) => {
       console.log({wordAndPicture});
       const word = wordAndPicture.word;
       const picture = wordAndPicture.picture;
-      //const scramble = scrambleWord(word);
+      const compliment = await OpenAIAPI_obj.generateCompliment(word);
       const scramble = scramblePhrase(word);
-      const newGame = new Game({ solution: word, scramble, picture });
+      const newGame = new Game({ 
+        solution: word, 
+        scramble: scramble, 
+        picture: picture,
+        compliment: compliment
+      });
       await newGame.save();
   
       res.send({ gameId: newGame._id, scramble, picture });
