@@ -17,6 +17,9 @@ class OpenAIAPI {
       try{
         word = await this.generateWord(wordParam,score);
         console.log({word});
+        if (word.length > process.env.WORD_LENGTH_MAX){
+          throw "word too long";
+        }
         picture = await this.generatePicture(word);
         console.log({picture});
         success = true;
@@ -33,8 +36,12 @@ class OpenAIAPI {
     return result;
   }
 
+  //give user a chance at getting an easy game, lower chance as score increases
   chance(num) {
-
+    //give user a minimum number of games that are automatically easy
+    if (num < process.env.EASY_GAMES_COUNT){
+      return true;
+    }
     num = parseInt(num);
     // Generate a random integer between 0 and num (inclusive)
     const result = Math.floor(Math.random() * (num + 1));
