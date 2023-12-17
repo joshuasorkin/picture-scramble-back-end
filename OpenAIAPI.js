@@ -22,7 +22,7 @@ class OpenAIAPI {
     while(!success){
       try{
         //word = await this.generateWord(wordParam,score);
-        word = getRandomWord();
+        word = this.getRandomWord();
         console.log({word});
         if (word.length > process.env.WORD_LENGTH_MAX){
           throw "word too long";
