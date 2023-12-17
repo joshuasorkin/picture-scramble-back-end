@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import fs from 'fs';
 
 class OpenAIAPI {
   constructor(wordList) {
