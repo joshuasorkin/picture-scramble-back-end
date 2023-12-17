@@ -1,10 +1,11 @@
 import OpenAI from "openai";
 
 class OpenAIAPI {
-  constructor() {
+  constructor(wordList) {
     this.client = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY, // Your OpenAI API Key
     });
+    this.wordList = wordList;
   }
 
   async generateWordAndPictureUntilSuccess(wordParam = null,score){

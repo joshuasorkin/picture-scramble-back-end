@@ -26,6 +26,9 @@ const gameSchema = new mongoose.Schema({
 });
 const Game = mongoose.model('Game', gameSchema);
 
+const wordList = fs.readFileSync(process.env.WORDLIST_FILE,'utf8').split('\n');
+
+
 const scramblePhrase = (phrase) => {
   const phraseArray = phrase.split(' ');
   for(let x=0;x<phraseArray.length;x++){
