@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import OpenAIAPI from './OpenAIAPI.js'; // Adjust this import based on your implementation
 import dotenv from 'dotenv';
 import cors from 'cors';
+import fs from 'fs';
 dotenv.config();
 
 const wordList = fs.readFileSync(process.env.WORDLIST_FILE,'utf8').split('\n');

@@ -1,5 +1,4 @@
 import OpenAI from "openai";
-import fs from 'fs';
 
 class OpenAIAPI {
   constructor(wordList) {
@@ -11,7 +10,7 @@ class OpenAIAPI {
 
   getRandomWord() {
     const randomIndex = Math.floor(Math.random() * this.wordList.length);
-    return wordList[randomIndex];
+    return this.wordList[randomIndex];
   }
 
   async generateWordAndPictureUntilSuccess(wordParam = null,score){
