@@ -5,7 +5,8 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 dotenv.config();
 
-const OpenAIAPI_obj = new OpenAIAPI();
+const wordList = fs.readFileSync(process.env.WORDLIST_FILE,'utf8').split('\n');
+const OpenAIAPI_obj = new OpenAIAPI(wordList);
 const app = express();
 app.use(express.json());
 
@@ -25,9 +26,6 @@ const gameSchema = new mongoose.Schema({
   compliment: String
 });
 const Game = mongoose.model('Game', gameSchema);
-
-const wordList = fs.readFileSync(process.env.WORDLIST_FILE,'utf8').split('\n');
-
 
 const scramblePhrase = (phrase) => {
   const phraseArray = phrase.split(' ');

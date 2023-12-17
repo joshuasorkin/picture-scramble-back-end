@@ -8,6 +8,11 @@ class OpenAIAPI {
     this.wordList = wordList;
   }
 
+  getRandomWord() {
+    const randomIndex = Math.floor(Math.random() * this.wordList.length);
+    return wordList[randomIndex];
+  }
+
   async generateWordAndPictureUntilSuccess(wordParam = null,score){
     console.log("starting generation");
     console.log({score});
@@ -16,7 +21,8 @@ class OpenAIAPI {
     let picture;
     while(!success){
       try{
-        word = await this.generateWord(wordParam,score);
+        //word = await this.generateWord(wordParam,score);
+        word = getRandomWord();
         console.log({word});
         if (word.length > process.env.WORD_LENGTH_MAX){
           throw "word too long";
