@@ -11,17 +11,17 @@ fs.readFile('wordlist.txt', 'utf8', (err, data) => {
     const words = data.split('\n');
 
     // Filter the words to include only those with 4 or more characters
-    const filteredWords = words.filter(word => word.length >= 4);
+    const filteredWords = words.filter(word => word.length >= 4 && word.length <= 9);
 
     // Join the filtered words back into a string
     const output = filteredWords.join('\n');
 
     // Write the string to wordlist4plus.txt
-    fs.writeFile('wordlist4plus.txt', output, err => {
+    fs.writeFile('wordlist4to9.txt', output, err => {
         if (err) {
             console.error('Error writing file:', err);
         } else {
-            console.log('File saved: wordlist4plus.txt');
+            console.log('File saved: wordlist4to9.txt');
         }
     });
 });
