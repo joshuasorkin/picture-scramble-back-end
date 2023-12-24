@@ -5,9 +5,7 @@ class OpenAIAPI {
     this.client = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY, // Your OpenAI API Key
     });
-    this.wordList = wordList;
-    //todo: remove this set implementation before pushing to production
-    this.wordsShown = new Set();
+    this.wordList = wordList;    
     this.wordGeneratedToday = wordGeneratedTodayFunction;
   }
 
@@ -16,27 +14,22 @@ class OpenAIAPI {
     return this.wordList[randomIndex];
   }
 
-  //stub: replace with check against `wordsShown` set in session document
-  wordShown(word){
-    return this.wordsShown.has(word);
-  }
-
   async generateWordAndPictureUntilSuccess(wordParam = null,score){
     console.log("starting generation");
     console.log({score});
     let success = false;
-    let alreadyShown = false;
+    let alreadyShownToday = false;
     let word;
     let picture;
     while(!success){
       try{
-        if(alreadyShown){
+        if(alreadyShownToday){
           word = this.getRandomWord();
         }
         word = await this.generateWord(wordParam,score);
         console.log({word});
-        if (this.wordShown(word)){
-          throw "already shown";
+        if (this.wordGeneratedToday(word)){
+          throw "already shown today";
         }
         if (word.length > process.env.WORD_LENGTH_MAX){
           throw "word too long";
