@@ -73,20 +73,15 @@ const findMismatches = (solution, playerSolution) => {
 };
 
 const wordGeneratedToday = async (word) => {
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
+  const twentyFourHoursAgo = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
 
-  const todayEnd = new Date();
-  todayEnd.setHours(23, 59, 59, 999);
-
-  const gamesToday = await Game.find({
+  const recentGames = await Game.find({
       solution: word,
       date_create: {
-          $gte: todayStart,
-          $lte: todayEnd
+          $gte: twentyFourHoursAgo
       }
   });
-  return gamesToday.length > 0;
+  return recentGames.length > 0;
 }
 
 
