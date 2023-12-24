@@ -119,7 +119,11 @@ app.get('/check-game', async (req, res) => {
       }
       const checkResult = game.solution === playerSolution;
       let mismatches = [];
-      if (!checkResult) {
+      // Update the game document with date_solve
+      if (checkResult){
+        await Game.findByIdAndUpdate(gameId, { date_solve: new Date() });
+      }
+      else {
         mismatches = findMismatches(game.solution, playerSolution);
       }
       console.log({checkResult});
