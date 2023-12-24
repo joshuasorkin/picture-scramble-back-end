@@ -28,8 +28,9 @@ class OpenAIAPI {
         }
         word = await this.generateWord(wordParam,score);
         console.log({word});
-        if (this.wordGeneratedToday(word)){
-          alreadyShownToday = true;
+        alreadyShownToday = this.wordGeneratedToday(word);
+        console.log({alreadyShownToday});
+        if (alreadyShownToday){
           throw "already shown today";
         }
         if (word.length > process.env.WORD_LENGTH_MAX){
