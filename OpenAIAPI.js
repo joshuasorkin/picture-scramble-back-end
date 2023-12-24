@@ -37,7 +37,6 @@ class OpenAIAPI {
           throw "word too long";
         }
         picture = await this.generatePicture(word);
-        this.wordsShown.add(word);
         success = true;
       }
       catch(error){
