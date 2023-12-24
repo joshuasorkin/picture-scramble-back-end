@@ -19,6 +19,7 @@ const wordGeneratedToday = async (word) => {
   });
   console.log({recentGames},"length:",recentGames.length);
   const result = recentGames.length > 0;
+  console.log({result});
   return result;
 }
 
