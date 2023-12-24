@@ -17,8 +17,9 @@ const wordGeneratedToday = async (word) => {
           $gte: twentyFourHoursAgo
       }
   });
-  console.log({recentGames});
-  return recentGames.length > 0;
+  console.log({recentGames},"length:",recentGames.length);
+  const result = recentGames.length > 0;
+  return result;
 }
 
 const OpenAIAPI_obj = new OpenAIAPI(wordList,wordGeneratedToday);
