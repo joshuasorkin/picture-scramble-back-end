@@ -72,6 +72,24 @@ const findMismatches = (solution, playerSolution) => {
     return mismatches;
 };
 
+const wordGeneratedToday = async (word) => {
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+
+  const todayEnd = new Date();
+  todayEnd.setHours(23, 59, 59, 999);
+
+  const gamesToday = await Game.find({
+      solution: word,
+      date_create: {
+          $gte: todayStart,
+          $lte: todayEnd
+      }
+  });
+  return gamesToday.length > 0;
+}
+
+
 app.get('/new-game', async (req, res) => {
     try {
       console.log("starting new game...");
