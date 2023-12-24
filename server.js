@@ -95,7 +95,8 @@ app.get('/new-game', async (req, res) => {
         solution: word, 
         scramble: scramble, 
         picture: picture,
-        compliment: compliment
+        compliment: compliment,
+        date_create: new Date()
       });
       await newGame.save();
   
