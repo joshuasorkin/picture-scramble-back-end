@@ -19,11 +19,12 @@ class OpenAIAPI {
     console.log({score});
     let success = false;
     let alreadyShownToday = false;
+    let generateAttempts = 0;
     let word;
     let picture;
     while(!success){
       try{
-        if(alreadyShownToday){
+        if(alreadyShownToday && generateAttempts > 3){
           word = this.getRandomWord();
         }
         word = await this.generateWord(wordParam,score);
@@ -31,6 +32,7 @@ class OpenAIAPI {
         alreadyShownToday = await this.wordGeneratedToday(word);
         console.log({alreadyShownToday});
         if (alreadyShownToday){
+          generateAttempts++;
           throw "already shown today";
         }
         if (word.length > process.env.WORD_LENGTH_MAX){
