@@ -7,7 +7,20 @@ import fs from 'fs';
 dotenv.config();
 
 const wordList = fs.readFileSync(process.env.WORDLIST_FILE,'utf8').split('\n');
-const OpenAIAPI_obj = new OpenAIAPI(wordList);
+
+const wordGeneratedToday = async (word) => {
+  const twentyFourHoursAgo = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
+
+  const recentGames = await Game.find({
+      solution: word,
+      date_create: {
+          $gte: twentyFourHoursAgo
+      }
+  });
+  return recentGames.length > 0;
+}
+
+const OpenAIAPI_obj = new OpenAIAPI(wordList,wordGeneratedToday);
 const app = express();
 app.use(express.json());
 
@@ -72,17 +85,7 @@ const findMismatches = (solution, playerSolution) => {
     return mismatches;
 };
 
-const wordGeneratedToday = async (word) => {
-  const twentyFourHoursAgo = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
 
-  const recentGames = await Game.find({
-      solution: word,
-      date_create: {
-          $gte: twentyFourHoursAgo
-      }
-  });
-  return recentGames.length > 0;
-}
 
 
 app.get('/new-game', async (req, res) => {
