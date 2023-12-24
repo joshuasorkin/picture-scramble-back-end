@@ -114,7 +114,8 @@ app.get('/new-game', async (req, res) => {
         compliment: compliment,
         date_create: new Date()
       });
-      await newGame.save();
+      const saveResult = await newGame.save();
+      console.log("date create:",newGame.date_create);
   
       res.send({ gameId: newGame._id, scramble, picture });
     } catch (error) {
@@ -135,9 +136,11 @@ app.get('/check-game', async (req, res) => {
       }
       const checkResult = game.solution === playerSolution;
       let mismatches = [];
+      let updatedGame;
       // Update the game document with date_solve
       if (checkResult){
-        await Game.findByIdAndUpdate(gameId, { date_solve: new Date() });
+        updatedGame = await Game.findByIdAndUpdate(gameId, { date_solve: new Date() },{new: true});
+        console.log("date_solve:",updatedGame.date_solve)
       }
       else {
         mismatches = findMismatches(game.solution, playerSolution);
