@@ -17,6 +17,7 @@ const wordGeneratedToday = async (word) => {
           $gte: twentyFourHoursAgo
       }
   });
+  console.log({recentGames});
   return recentGames.length > 0;
 }
 
