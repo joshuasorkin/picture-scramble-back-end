@@ -1,12 +1,14 @@
 import OpenAI from "openai";
 
 class OpenAIAPI {
-  constructor(wordList,wordGeneratedTodayFunction) {
+  //todo: need a better solution than just adding arguments to pass in more functions
+  constructor(wordList,wordGeneratedTodayFunction,findExistingPictureFunction) {
     this.client = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY, // Your OpenAI API Key
     });
     this.wordList = wordList;    
     this.wordGeneratedToday = wordGeneratedTodayFunction;
+    this.findExistingPicture = findExistingPictureFunction;
   }
 
   getRandomWord() {
@@ -103,6 +105,12 @@ class OpenAIAPI {
 
   async generatePicture(word) {
     try {
+      const existingPicture = this.findExistingPicture(word);
+      if (existingPicture){
+        console.log("found existing picture:",existingPicture)
+        return existingPicture;
+      }
+
       const response = await this.client.images.generate({
         model: "dall-e-3", // Replace with the appropriate model
         prompt:`Generate a picture of ${word}, in a random historical art style.  Do not include the word '${word}' in the picture. Do not include any text in the picture.`,
