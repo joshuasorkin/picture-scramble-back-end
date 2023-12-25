@@ -8,6 +8,28 @@ dotenv.config();
 
 const wordList = fs.readFileSync(process.env.WORDLIST_FILE,'utf8').split('\n');
 
+const findExistingPicture = async (word) => {
+  try {
+    // Search for all games with the given solution word
+    const gamesWithWord = await Game.find({ solution: word });
+
+    // Check if any games were found
+    if (gamesWithWord.length === 0) {
+      // Return null if no games found
+      return null;
+    }
+
+    // Randomly select one game from the array
+    const randomGame = gamesWithWord[Math.floor(Math.random() * gamesWithWord.length)];
+
+    // Return the picture property of the selected game
+    return randomGame.picture;
+  } catch (error) {
+    console.error('Error in findExistingPicture:', error);
+    throw error; // or handle it as you see fit
+  }
+};
+
 const wordGeneratedToday = async (word) => {
   const twentyFourHoursAgo = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
 
@@ -23,7 +45,7 @@ const wordGeneratedToday = async (word) => {
   return result;
 }
 
-const OpenAIAPI_obj = new OpenAIAPI(wordList,wordGeneratedToday);
+const OpenAIAPI_obj = new OpenAIAPI(wordList,wordGeneratedToday,findExistingPicture);
 const app = express();
 app.use(express.json());
 
