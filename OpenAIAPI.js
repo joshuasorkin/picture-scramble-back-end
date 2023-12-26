@@ -106,6 +106,7 @@ class OpenAIAPI {
   async generatePicture(word) {
     try {
       const existingPicture = await this.findExistingPicture(word);
+      console.log({existingPicture});
       if (existingPicture){
         console.log("found existing picture:",existingPicture);
         return existingPicture;
