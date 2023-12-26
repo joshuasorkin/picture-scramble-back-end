@@ -10,6 +10,9 @@ const wordList = fs.readFileSync(process.env.WORDLIST_FILE,'utf8').split('\n');
 
 const findExistingPicture = async (word) => {
   try {
+    //todo: remove this stub value
+    word = "coffee";
+
     // Search for all games with the given solution word
     const gamesWithWord = await Game.find({ solution: word });
 
