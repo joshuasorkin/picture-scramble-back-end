@@ -49,25 +49,21 @@ async function storeImage(word, url) {
 
 const findExistingPicture = async (word) => {
   try {
-    // Search for all games with the given solution word
-    const gamesWithWord = await Game.find({ solution: word });
+    const wordDoc = await WordImage.findOne({ word: word });
 
-    // Check if any games were found
-    if (gamesWithWord.length === 0) {
-      // Return null if no games found
-      return null;
+    if (!wordDoc || wordDoc.images.length === 0) {
+      return null; // No matching document or no images found
     }
 
-    // Randomly select one game from the array
-    const randomGame = gamesWithWord[Math.floor(Math.random() * gamesWithWord.length)];
-
-    // Return the picture property of the selected game
-    return randomGame.picture;
-  } catch (error) {
-    console.error('Error in findExistingPicture:', error);
-    throw error; // or handle it as you see fit
+    // Select a random image from the array
+    const randomIndex = Math.floor(Math.random() * wordDoc.images.length);
+    return wordDoc.images[randomIndex];
+  } catch (err) {
+    console.error('Error:', err);
+    throw err;
   }
-};
+}
+
 
 const wordGeneratedToday = async (word) => {
   const twentyFourHoursAgo = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
@@ -178,7 +174,7 @@ app.get('/new-game', async (req, res) => {
         compliment: compliment,
         date_create: new Date()
       });
-      storeImage(word,picture);
+      //storeImage(word,picture);
       const saveResult = await newGame.save();
       console.log("date create:",newGame.date_create);
   
