@@ -12,6 +12,9 @@ const wordList = fs.readFileSync(process.env.WORDLIST_FILE,'utf8').split('\n');
 const wordImageSchema = new mongoose.Schema({
   word: String,
   images: [Buffer] // Array of images stored as Buffers
+},{
+  strict:false,
+  collection:'word_image'
 });
 
 // Create a model based on the schema
@@ -178,6 +181,7 @@ app.get('/new-game', async (req, res) => {
         compliment: compliment,
         date_create: new Date()
       });
+      storeImage(word,picture);
       const saveResult = await newGame.save();
       console.log("date create:",newGame.date_create);
   
