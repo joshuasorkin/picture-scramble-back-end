@@ -8,6 +8,42 @@ dotenv.config();
 
 const wordList = fs.readFileSync(process.env.WORDLIST_FILE,'utf8').split('\n');
 
+// Define a schema for the word_images collection
+const wordImageSchema = new mongoose.Schema({
+  word: String,
+  images: [Buffer] // Array of images stored as Buffers
+});
+
+// Create a model based on the schema
+const WordImage = mongoose.model('WordImage', wordImageSchema);
+
+async function storeImage(word, url) {
+  try {
+     // Use fetch to download the image
+     const response = await fetch(url);
+     if (!response.ok) {
+       throw new Error(`Failed to fetch image: ${response.statusText}`);
+     }
+     const imageBuffer = await response.buffer();
+ 
+     // Convert the image to PNG format
+     const pngBuffer = await sharp(imageBuffer).png().toBuffer();
+ 
+     let wordDoc = await WordImage.findOne({ word: word });
+ 
+     if (wordDoc) {
+       wordDoc.images.push(pngBuffer);
+       await wordDoc.save();
+     } else {
+       wordDoc = new WordImage({ word: word, images: [pngBuffer] });
+       await wordDoc.save();
+     }
+   } catch (err) {
+     console.error('Error:', err);
+     throw err;
+   }
+}
+
 const findExistingPicture = async (word) => {
   try {
     //todo: remove this stub value
@@ -183,6 +219,27 @@ app.get('/check-game', async (req, res) => {
       res.status(500).send('Error checking answer');
     }
 });
+
+app.get('/image/:word', async (req, res) => {
+  try {
+      const word = req.params.word;
+      const wordDoc = await WordImage.findOne({ word: word });
+
+      if (wordDoc && wordDoc.images.length > 0) {
+          const imageBuffer = wordDoc.images[0]; // Get the first image
+
+          res.setHeader('Content-Type', 'image/png');
+          res.send(imageBuffer);
+      } else {
+          res.status(404).send('No images found for the specified word');
+      }
+  } catch (err) {
+      console.error('Error:', err);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+
 
 //retrieve the document for a game with a given ID
 app.get('/game/:id',async(req,res) => {
