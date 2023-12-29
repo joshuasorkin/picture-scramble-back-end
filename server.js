@@ -21,7 +21,7 @@ const wordImageSchema = new mongoose.Schema({
 // Create a model based on the schema
 const WordImage = mongoose.model('WordImage', wordImageSchema);
 
-async function storeImage(word, url) {
+async function storeImage(word, url, language) {
   try {
     console.log("storeImage url:",url);
      // Use fetch to download the image
@@ -32,13 +32,16 @@ async function storeImage(word, url) {
      const arrayBuffer = await response.arrayBuffer();
      const imageBuffer = Buffer.from(arrayBuffer);
  
-     let wordDoc = await WordImage.findOne({ word: word });
+     let wordDoc = await WordImage.findOne({ 
+        word: word,
+        language: language
+      });
  
      if (wordDoc) {
        wordDoc.images.push(imageBuffer);
        await wordDoc.save();
      } else {
-       wordDoc = new WordImage({ word: word, images: [imageBuffer] });
+       wordDoc = new WordImage({ word: word, images: [imageBuffer] ,language:language});
        await wordDoc.save();
      }
      console.log("image saved")
