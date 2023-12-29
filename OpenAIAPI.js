@@ -2,13 +2,14 @@ import OpenAI from "openai";
 
 class OpenAIAPI {
   //todo: need a better solution than just adding arguments to pass in more functions
-  constructor(wordList,wordGeneratedTodayFunction,findExistingPictureFunction) {
+  constructor(wordList,wordGeneratedTodayFunction,findExistingPictureFunction,storeImageFunction) {
     this.client = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY, // Your OpenAI API Key
     });
     this.wordList = wordList;    
     this.wordGeneratedToday = wordGeneratedTodayFunction;
     this.findExistingPicture = findExistingPictureFunction;
+    this.storeImage = storeImageFunction;
   }
 
   getRandomWord() {
@@ -121,6 +122,8 @@ class OpenAIAPI {
       });
 
       let picture = response.data[0].url; // URL of the generated image
+      console.log("storing image...");
+      storeImage(word,picture);
       return picture;
     } catch (error) {
       console.error('Error generating picture:', error);

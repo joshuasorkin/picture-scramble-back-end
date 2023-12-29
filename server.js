@@ -81,7 +81,7 @@ const wordGeneratedToday = async (word) => {
   return result;
 }
 
-const OpenAIAPI_obj = new OpenAIAPI(wordList,wordGeneratedToday,findExistingPicture);
+const OpenAIAPI_obj = new OpenAIAPI(wordList,wordGeneratedToday,findExistingPicture,storeImage);
 const app = express();
 app.use(express.json());
 
@@ -175,8 +175,6 @@ app.get('/new-game', async (req, res) => {
         compliment: compliment,
         date_create: new Date()
       });
-      console.log("storing image...");
-      storeImage(word,picture);
       const saveResult = await newGame.save();
       console.log("date create:",newGame.date_create);
   
