@@ -134,6 +134,9 @@ class OpenAIAPI {
     try {
       console.log("generating compliment...");
       const prompt = process.env.GENERATE_COMPLIMENT.replace('{}',word).replace('{language}',language);
+      if(language !== "English"){
+        prompt += " Do not include an English translation.";
+      }
       console.log({prompt});
       const response = await this.client.chat.completions.create({
         model: "gpt-3.5-turbo", // Or another suitable model
