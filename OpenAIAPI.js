@@ -41,7 +41,7 @@ class OpenAIAPI {
         if (word.length > process.env.WORD_LENGTH_MAX){
           throw "word too long";
         }
-        picture = await this.generatePicture(word);
+        picture = await this.generatePicture(word,language);
         success = true;
       }
       catch(error){
@@ -75,14 +75,14 @@ class OpenAIAPI {
       console.log("generating word...");
       let prompt;
       if (topicParam){
-        prompt = process.env.GENERATE_WORD_PROMPT_TOPIC.replace('{topic}',topicParam).replace('{language}',language);
+        prompt = process.env.GENERATE_WORD_PROMPT_TOPIC.replace('topic',topicParam).replace('language',language);
       }
       else{
         if(this.chance(score)){
-          prompt = process.env.GENERATE_WORD_PROMPT_CONCRETE.replace('{language}',language);
+          prompt = process.env.GENERATE_WORD_PROMPT_CONCRETE.replace('language',language);
         }
         else{
-          prompt = process.env.GENERATE_WORD_PROMPT_ABSTRACT.replace('{language}',language);
+          prompt = process.env.GENERATE_WORD_PROMPT_ABSTRACT.replace('language',language);
         }
       }
       console.log({prompt});
@@ -104,7 +104,7 @@ class OpenAIAPI {
     }
   }
 
-  async generatePicture(word) {
+  async generatePicture(word,language) {
     try {
       const existingPicture = await this.findExistingPicture(word);
       console.log({existingPicture});
@@ -122,7 +122,7 @@ class OpenAIAPI {
 
       let picture = response.data[0].url; // URL of the generated image
       console.log("storing image...");
-      this.storeImage(word,picture);
+      this.storeImage(word,picture,language);
       return picture;
     } catch (error) {
       console.error('Error generating picture:', error);
@@ -133,7 +133,7 @@ class OpenAIAPI {
   async generateCompliment(word,language) {
     try {
       console.log("generating compliment...");
-      let prompt = process.env.GENERATE_COMPLIMENT.replace('{}',word).replace('{language}',language);
+      let prompt = process.env.GENERATE_COMPLIMENT.replace('word',word).replace('language',language);
       if(language !== "English"){
         prompt += " Do not include an English translation.";
       }
