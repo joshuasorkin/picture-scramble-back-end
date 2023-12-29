@@ -56,9 +56,7 @@ const findExistingPicture = async (word) => {
       return null; // No matching document or no images found
     }
 
-    // Select a random image from the array
-    const randomIndex = Math.floor(Math.random() * wordDoc.images.length);
-    return wordDoc.images[randomIndex];
+    return process.env.BASE_URL+`/image/${word}`
   } catch (err) {
     console.error('Error:', err);
     throw err;
