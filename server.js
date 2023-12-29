@@ -4,6 +4,7 @@ import OpenAIAPI from './OpenAIAPI.js'; // Adjust this import based on your impl
 import dotenv from 'dotenv';
 import cors from 'cors';
 import fs from 'fs';
+import fetch from 'node-fetch';
 dotenv.config();
 
 const wordList = fs.readFileSync(process.env.WORDLIST_FILE,'utf8').split('\n');
@@ -27,7 +28,8 @@ async function storeImage(word, url) {
      if (!response.ok) {
        throw new Error(`Failed to fetch image: ${response.statusText}`);
      }
-     const imageBuffer = await response.buffer();
+     const arrayBuffer = await response.arrayBuffer();
+     const imageBuffer = Buffer.from(arrayBuffer);
  
      // Convert the image to PNG format
      const pngBuffer = await sharp(imageBuffer).png().toBuffer();
