@@ -41,6 +41,7 @@ async function storeImage(word, url) {
        wordDoc = new WordImage({ word: word, images: [pngBuffer] });
        await wordDoc.save();
      }
+     console.log("image saved")
    } catch (err) {
      console.error('Error:', err);
      throw err;
