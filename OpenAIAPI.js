@@ -122,7 +122,7 @@ class OpenAIAPI {
 
       let picture = response.data[0].url; // URL of the generated image
       console.log("storing image...");
-      storeImage(word,picture);
+      this.storeImage(word,picture);
       return picture;
     } catch (error) {
       console.error('Error generating picture:', error);
