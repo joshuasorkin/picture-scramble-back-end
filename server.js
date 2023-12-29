@@ -151,8 +151,10 @@ app.get('/new-game', async (req, res) => {
     try {
       console.log("starting new game...");
       const topicParam = req.query.topic;
-      //const languageParam = req.query.language;
-      const languageParam = "Spanish";
+      let languageParam = req.query.language;
+      if (languageParam === undefined){
+        languageParam = "French";
+      }
       console.log({topicParam});
       const scoreParam = req.query.score ? req.query.score : 0;
       console.log({scoreParam});
