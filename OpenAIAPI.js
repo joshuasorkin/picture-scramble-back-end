@@ -133,7 +133,7 @@ class OpenAIAPI {
   async generateCompliment(word,language) {
     try {
       console.log("generating compliment...");
-      let prompt = process.env.GENERATE_COMPLIMENT.replace("'word'",word).replace('language',language);
+      let prompt = process.env.GENERATE_COMPLIMENT.replaceAll("'word'",word).replace('language',language);
       if(language !== "English"){
         prompt += " Do not include an English translation.";
       }
