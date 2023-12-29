@@ -32,7 +32,7 @@ class OpenAIAPI {
         }
         word = await this.generateWord(wordParam,score);
         console.log({word});
-        //alreadyShownToday = await this.wordGeneratedToday(word);
+        alreadyShownToday = await this.wordGeneratedToday(word);
         console.log({alreadyShownToday});
         if (alreadyShownToday){
           generateAttempts++;
