@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import fs from 'fs';
 import fetch from 'node-fetch';
+import sharp from 'sharp';
 dotenv.config();
 
 const wordList = fs.readFileSync(process.env.WORDLIST_FILE,'utf8').split('\n');
