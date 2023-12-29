@@ -160,12 +160,12 @@ app.get('/new-game', async (req, res) => {
         wordAndPicture = await OpenAIAPI_obj.generateWordAndPictureUntilSuccess(topicParam)
       }
       else{ 
-        wordAndPicture = await OpenAIAPI_obj.generateWordAndPictureUntilSuccess(null,scoreParam);
+        wordAndPicture = await OpenAIAPI_obj.generateWordAndPictureUntilSuccess(null,scoreParam,languageParam);
       }
       console.log({wordAndPicture});
       const word = wordAndPicture.word;
       const picture = wordAndPicture.picture;
-      const compliment = await OpenAIAPI_obj.generateCompliment(word);
+      const compliment = await OpenAIAPI_obj.generateCompliment(word,languageParam);
       const scramble = scramblePhrase(word);
       const newGame = new Game({ 
         solution: word, 

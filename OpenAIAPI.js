@@ -17,7 +17,7 @@ class OpenAIAPI {
     return this.wordList[randomIndex];
   }
 
-  async generateWordAndPictureUntilSuccess(wordParam = null,score){
+  async generateWordAndPictureUntilSuccess(wordParam = null,score,language){
     console.log("starting generation");
     console.log({score});
     let success = false;
@@ -30,7 +30,7 @@ class OpenAIAPI {
         if(alreadyShownToday && generateAttempts > 3){
           word = this.getRandomWord();
         }
-        word = await this.generateWord(wordParam,score);
+        word = await this.generateWord(wordParam,score,language);
         console.log({word});
         alreadyShownToday = await this.wordGeneratedToday(word);
         console.log({alreadyShownToday});
@@ -70,19 +70,19 @@ class OpenAIAPI {
     return result >= (num / 2);
   }
 
-  async generateWord(topicParam,score = 0) {
+  async generateWord(topicParam,score = 0,language) {
     try {
       console.log("generating word...");
       let prompt;
       if (topicParam){
-        prompt = process.env.GENERATE_WORD_PROMPT_TOPIC.replace('{}',topicParam);
+        prompt = process.env.GENERATE_WORD_PROMPT_TOPIC.replace('{topic}',topicParam).replace('{language}',language);
       }
       else{
         if(this.chance(score)){
-          prompt = process.env.GENERATE_WORD_PROMPT_CONCRETE;
+          prompt = process.env.GENERATE_WORD_PROMPT_CONCRETE.replace('{language}',language);
         }
         else{
-          prompt = process.env.GENERATE_WORD_PROMPT_ABSTRACT;
+          prompt = process.env.GENERATE_WORD_PROMPT_ABSTRACT.replace('{language}',language);
         }
       }
       console.log({prompt});
@@ -130,10 +130,10 @@ class OpenAIAPI {
     }
   }
 
-  async generateCompliment(word) {
+  async generateCompliment(word,language) {
     try {
       console.log("generating compliment...");
-      const prompt = process.env.GENERATE_COMPLIMENT.replace('{}',word);
+      const prompt = process.env.GENERATE_COMPLIMENT.replace('{}',word).replace('{language}',language);
       console.log({prompt});
       const response = await this.client.chat.completions.create({
         model: "gpt-3.5-turbo", // Or another suitable model
