@@ -31,16 +31,13 @@ async function storeImage(word, url) {
      const arrayBuffer = await response.arrayBuffer();
      const imageBuffer = Buffer.from(arrayBuffer);
  
-     // Convert the image to PNG format
-     const pngBuffer = await sharp(imageBuffer).png().toBuffer();
- 
      let wordDoc = await WordImage.findOne({ word: word });
  
      if (wordDoc) {
-       wordDoc.images.push(pngBuffer);
+       wordDoc.images.push(imageBuffer);
        await wordDoc.save();
      } else {
-       wordDoc = new WordImage({ word: word, images: [pngBuffer] });
+       wordDoc = new WordImage({ word: word, images: [imageBuffer] });
        await wordDoc.save();
      }
      console.log("image saved")
