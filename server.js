@@ -23,6 +23,7 @@ const WordImage = mongoose.model('WordImage', wordImageSchema);
 
 async function storeImage(word, url) {
   try {
+    console.log("storeImage url:",url);
      // Use fetch to download the image
      const response = await fetch(url);
      if (!response.ok) {
