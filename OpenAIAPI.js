@@ -40,6 +40,7 @@ class OpenAIAPI {
         if (word.length > process.env.WORD_LENGTH_MAX){
           throw "word too long";
         }
+        word = "bicycle";
         picture = await this.generatePicture(word);
         success = true;
       }
