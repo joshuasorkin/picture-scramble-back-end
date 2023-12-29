@@ -32,7 +32,7 @@ class OpenAIAPI {
         }
         word = await this.generateWord(wordParam,score);
         console.log({word});
-        alreadyShownToday = await this.wordGeneratedToday(word);
+        //alreadyShownToday = await this.wordGeneratedToday(word);
         console.log({alreadyShownToday});
         if (alreadyShownToday){
           generateAttempts++;
@@ -41,7 +41,6 @@ class OpenAIAPI {
         if (word.length > process.env.WORD_LENGTH_MAX){
           throw "word too long";
         }
-        word = "bicycle";
         picture = await this.generatePicture(word);
         success = true;
       }
