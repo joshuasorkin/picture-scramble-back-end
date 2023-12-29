@@ -175,7 +175,8 @@ app.get('/new-game', async (req, res) => {
         compliment: compliment,
         date_create: new Date()
       });
-      //storeImage(word,picture);
+      console.log("storing image...");
+      storeImage(word,picture);
       const saveResult = await newGame.save();
       console.log("date create:",newGame.date_create);
   
