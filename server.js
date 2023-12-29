@@ -41,7 +41,7 @@ async function storeImage(word, url, language) {
        wordDoc.images.push(imageBuffer);
        await wordDoc.save();
      } else {
-       wordDoc = new WordImage({ word: word, images: [imageBuffer] ,language:language});
+       wordDoc = new WordImage({ word: word, images: [imageBuffer], language:language});
        await wordDoc.save();
      }
      console.log("image saved")
@@ -156,7 +156,7 @@ app.get('/new-game', async (req, res) => {
       const topicParam = req.query.topic;
       let languageParam = req.query.language;
       if (languageParam === undefined){
-        languageParam = "French";
+        languageParam = process.env.DEFAULT_LANGUAGE;
       }
       console.log({topicParam});
       const scoreParam = req.query.score ? req.query.score : 0;
