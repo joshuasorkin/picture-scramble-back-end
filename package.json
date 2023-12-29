@@ -17,6 +17,7 @@
     "fs": "^0.0.1-security",
     "mongodb": "^6.3.0",
     "mongoose": "^8.0.1",
+    "node-fetch": "^3.3.2",
     "openai": "^4.20.1"
   },
   "devDependencies": {
