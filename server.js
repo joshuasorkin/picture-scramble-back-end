@@ -47,7 +47,6 @@ async function storeImage(word, url, language) {
      console.log("image saved")
    } catch (err) {
      console.error('Error:', err);
-     throw err;
    }
 }
 
