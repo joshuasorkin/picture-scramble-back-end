@@ -214,7 +214,8 @@ app.get('/check-game', async (req, res) => {
       console.log({mismatches});
       res.send({ 
         checkResult:checkResult,
-        compliment:game.compliment
+        compliment:game.compliment,
+        mismatches:mismatches
       });
     } catch (error) {
       res.status(500).send('Error checking answer');
