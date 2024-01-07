@@ -228,7 +228,11 @@ app.get('/image/:word', async (req, res) => {
       const wordDoc = await WordImage.findOne({ word: word });
 
       if (wordDoc && wordDoc.images.length > 0) {
-          const imageBuffer = wordDoc.images[0]; // Get the first image
+          // Generate a random index
+          const randomIndex = Math.floor(Math.random() * wordDoc.images.length);
+
+          // Get the image at the random index
+          const imageBuffer = wordDoc.images[randomIndex];
 
           res.setHeader('Content-Type', 'image/png');
           res.send(imageBuffer);
@@ -240,6 +244,7 @@ app.get('/image/:word', async (req, res) => {
       res.status(500).send('Internal Server Error');
   }
 });
+
 
 
 
