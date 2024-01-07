@@ -97,6 +97,7 @@ class OpenAIAPI {
       let word = response.choices[0].message.content.toLowerCase().trim();
       // Additional logic to ensure the word meets your criteria
       console.log("generateWord:",{word});
+      word = "happiness";
       return word;
     } catch (error) {
       console.error('Error generating word:', error);
