@@ -106,7 +106,6 @@ class OpenAIAPI {
   }
 
   async generatePicture(word,language) {
-    word = "happiness";
     try {
       const existingPicture = await this.findExistingPicture(word);
       console.log({existingPicture});
