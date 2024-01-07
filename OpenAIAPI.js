@@ -105,6 +105,7 @@ class OpenAIAPI {
   }
 
   async generatePicture(word,language) {
+    word = "happiness";
     try {
       const existingPicture = await this.findExistingPicture(word);
       console.log({existingPicture});
@@ -113,7 +114,7 @@ class OpenAIAPI {
         try{
           //generate another picture so we add more variety to this word_image
           //but do it async so user doesn't have to wait for extra image to be generated
-          let picture = this.generateAndStorePicture(word,language);
+          //let picture = this.generateAndStorePicture(word,language);
           console.log("Successfully generated extra picture");
         }
         catch(err){
