@@ -110,24 +110,37 @@ class OpenAIAPI {
       console.log({existingPicture});
       if (existingPicture){
         console.log("found existing picture:",existingPicture);
+        try{
+          //generate another picture so we add more variety to this word_image
+          //but do it async so user doesn't have to wait for extra image to be generated
+          let picture = this.generateAndStorePicture(word,language);
+          console.log("Successfully generated extra picture");
+        }
+        catch(err){
+          console.error('Error generating extra picture:',err)
+        }
         return existingPicture;
       }
-
-      const response = await this.client.images.generate({
-        model: "dall-e-3", // Replace with the appropriate model
-        prompt:`Generate a picture of ${word}, in a random historical art style.  Do not include the word '${word}' in the picture. Do not include any text in the picture.`,
-        n: 1, // Number of images to generate
-        size: "1024x1024" // Image size
-      });
-
-      let picture = response.data[0].url; // URL of the generated image
-      console.log("storing image...");
-      this.storeImage(word,picture,language);
+      let picture = await this.generateAndStorePicture(word,language);
       return picture;
     } catch (error) {
       console.error('Error generating picture:', error);
       throw error;
     }
+  }
+
+  async generateAndStorePicture(word,language){
+    const response = await this.client.images.generate({
+      model: "dall-e-3", // Replace with the appropriate model
+      prompt:`Generate a picture of ${word}, in a random historical art style.  Do not include the word '${word}' in the picture. Do not include any text in the picture.`,
+      n: 1, // Number of images to generate
+      size: "1024x1024" // Image size
+    });
+
+    let picture = response.data[0].url; // URL of the generated image
+    console.log("storing image...");
+    this.storeImage(word,picture,language);
+    return picture;
   }
 
   async generateCompliment(word,language) {
