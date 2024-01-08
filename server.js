@@ -55,9 +55,10 @@ const findExistingPicture = async (word) => {
     const wordDoc = await WordImage.findOne({ word: word });
 
     if (!wordDoc || wordDoc.images.length === 0) {
+      console.log("No existing image found");
       return null; // No matching document or no images found
     }
-
+    console.log("Existing image found");
     return process.env.BASE_URL+`/image/${word}`
   } catch (err) {
     console.error('Error:', err);
@@ -224,13 +225,14 @@ app.get('/check-game', async (req, res) => {
 
 app.get('/image/:word', async (req, res) => {
   try {
+      console.log("retrieving image from server...");
       const word = req.params.word;
       const wordDoc = await WordImage.findOne({ word: word });
-
       if (wordDoc && wordDoc.images.length > 0) {
+          console.log("image count:",wordDoc.images.length);
           // Generate a random index
           const randomIndex = Math.floor(Math.random() * wordDoc.images.length);
-
+          console.log("random image index",randomIndex);
           // Get the image at the random index
           const imageBuffer = wordDoc.images[randomIndex];
 
