@@ -2,14 +2,12 @@ import OpenAI from "openai";
 
 class OpenAIAPI {
   //todo: need a better solution than just adding arguments to pass in more functions
-  constructor(wordList,wordGeneratedTodayFunction,findExistingPictureFunction,storeImageFunction) {
+  constructor(wordList,OpenAI_utilities) {
     this.client = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY, // Your OpenAI API Key
     });
-    this.wordList = wordList;    
-    this.wordGeneratedToday = wordGeneratedTodayFunction;
-    this.findExistingPicture = findExistingPictureFunction;
-    this.storeImage = storeImageFunction;
+    this.wordList = wordList;
+    this.OpenAI_utilities = OpenAI_utilities;   
   }
 
   getRandomWord() {
@@ -32,7 +30,7 @@ class OpenAIAPI {
         }
         word = await this.generateWord(wordParam,score,language);
         console.log({word});
-        alreadyShownToday = await this.wordGeneratedToday(word);
+        alreadyShownToday = await this.OpenAI_utilities.wordGeneratedToday(word);
         console.log({alreadyShownToday});
         if (alreadyShownToday){
           generateAttempts++;
@@ -106,7 +104,7 @@ class OpenAIAPI {
 
   async generatePicture(word,language) {
     try {
-      const existingPicture = await this.findExistingPicture(word);
+      const existingPicture = await this.OpenAI_utilities.findExistingPicture(word);
       console.log({existingPicture});
       if (existingPicture){
         console.log("found existing picture:",existingPicture);
@@ -139,7 +137,7 @@ class OpenAIAPI {
 
     let picture = response.data[0].url; // URL of the generated image
     console.log("storing image...");
-    this.storeImage(word,picture,language);
+    this.OpenAI_utilities.storeImage(word,picture,language);
     return picture;
   }
 

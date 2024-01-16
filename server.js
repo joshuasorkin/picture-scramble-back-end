@@ -82,7 +82,13 @@ const wordGeneratedToday = async (word) => {
   return result;
 }
 
-const OpenAIAPI_obj = new OpenAIAPI(wordList,wordGeneratedToday,findExistingPicture,storeImage);
+const OpenAI_utilities = {
+  wordGeneratedToday,
+  findExistingPicture,
+  storeImage
+}
+
+const OpenAIAPI_obj = new OpenAIAPI(wordList,OpenAI_utilities);
 const app = express();
 app.use(express.json());
 
