@@ -15,6 +15,10 @@ class OpenAIAPI {
     return this.wordList[randomIndex];
   }
 
+  async getRandomWordFromWord_Image(language){
+
+  }
+
   async generateWordAndPictureUntilSuccess(wordParam = null,score,language){
     console.log("starting generation");
     console.log({score});
@@ -28,7 +32,15 @@ class OpenAIAPI {
         if(alreadyShownToday && generateAttempts > 3){
           word = this.getRandomWord();
         }
-        word = await this.generateWord(wordParam,score,language);
+        const word_image = await this.OpenAI_utilities.getRandomImageByLanguage(language);
+        if (!word_image){
+          console.log("no doc found in word_image, generating via generateWord()");
+          word = await this.generateWord(wordParam,score,language);
+        }
+        else{
+          console.log("found doc in word_image");
+          word = word_image.word;
+        }
         console.log({word});
         alreadyShownToday = await this.OpenAI_utilities.wordGeneratedToday(word);
         console.log({alreadyShownToday});
