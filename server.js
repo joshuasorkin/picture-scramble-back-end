@@ -22,8 +22,6 @@ const wordImageSchema = new mongoose.Schema({
 // Create a model based on the schema
 const WordImage = mongoose.model('WordImage', wordImageSchema);
 
-await WordImage.createIndexes({ language: 1 });
-
 async function storeImage(word, url, language) {
   try {
     console.log("storeImage url:",url);
