@@ -109,7 +109,8 @@ const wordGeneratedToday = async (word) => {
 const OpenAI_utilities = {
   wordGeneratedToday,
   findExistingPicture,
-  storeImage
+  storeImage,
+  getRandomImageByLanguage
 }
 
 const OpenAIAPI_obj = new OpenAIAPI(wordList,OpenAI_utilities);
