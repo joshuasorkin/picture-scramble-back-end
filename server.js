@@ -12,7 +12,8 @@ const wordList = fs.readFileSync(process.env.WORDLIST_FILE,'utf8').split('\n');
 // Define a schema for the word_images collection
 const wordImageSchema = new mongoose.Schema({
   word: String,
-  images: [Buffer] // Array of images stored as Buffers
+  images: [Buffer], // Array of images stored as Buffers
+  language: String
 },{
   strict:false,
   collection:'word_image'
@@ -49,6 +50,29 @@ async function storeImage(word, url, language) {
      console.error('Error:', err);
    }
 }
+
+const getRandomImageByLanguage = async (language) => {
+  try {
+    // Find all documents with the specified language
+    const wordImages = await WordImage.find({ language: language });
+
+    if (wordImages.length === 0) {
+      console.log("No images found for the specified language");
+      return null; // No images found for the specified language
+    }
+
+    // Select a random document from the array
+    const randomIndex = Math.floor(Math.random() * wordImages.length);
+    const randomWordImage = wordImages[randomIndex];
+
+    console.log(`Random image selected for language: ${language}`);
+    return randomWordImage;
+  } catch (err) {
+    console.error('Error:', err);
+    throw err; // Rethrow the error to handle it in the calling function
+  }
+};
+
 
 const findExistingPicture = async (word) => {
   try {
