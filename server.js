@@ -53,25 +53,25 @@ async function storeImage(word, url, language) {
 
 const getRandomImageByLanguage = async (language) => {
   try {
-    // Find all documents with the specified language
-    const wordImages = await WordImage.find({ language: language });
+    const randomWordImages = await WordImage.aggregate([
+      { $match: { language: language } },
+      { $sample: { size: 1 } }
+    ]);
 
-    if (wordImages.length === 0) {
+    if (randomWordImages.length > 0) {
+      const randomWordImage = randomWordImages[0];
+      console.log(`Random image selected for language: ${language}`);
+      return randomWordImage;
+    } else {
       console.log("No images found for the specified language");
-      return null; // No images found for the specified language
+      return null;
     }
-
-    // Select a random document from the array
-    const randomIndex = Math.floor(Math.random() * wordImages.length);
-    const randomWordImage = wordImages[randomIndex];
-
-    console.log(`Random image selected for language: ${language}`);
-    return randomWordImage;
   } catch (err) {
     console.error('Error:', err);
-    throw err; // Rethrow the error to handle it in the calling function
+    throw err;
   }
 };
+
 
 
 const findExistingPicture = async (word) => {
