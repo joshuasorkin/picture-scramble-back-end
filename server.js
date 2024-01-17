@@ -55,17 +55,19 @@ const getRandomImageByLanguage = async (language) => {
   try {
     console.time('getRandomImageByLanguage');
     
+    // Using the aggregation framework to randomly sample documents
     const randomWordImages = await WordImage.aggregate([
       { $match: { language: language } },
-      { $sample: { size: 1 } }
+      { $sample: { size: 1 } },
+      { $project: { word: 1, _id: 0 } } // Include only the 'word' field
     ]);
 
     console.timeEnd('getRandomImageByLanguage');
 
     if (randomWordImages.length > 0) {
-      const randomWordImage = randomWordImages[0];
-      console.log(`Random image selected for language: ${language}`);
-      return randomWordImage;
+      const randomWord = randomWordImages[0].word;
+      console.log(`Random word selected for language: ${language}: ${randomWord}`);
+      return randomWord;
     } else {
       console.log("No images found for the specified language");
       return null;
@@ -75,6 +77,7 @@ const getRandomImageByLanguage = async (language) => {
     throw err;
   }
 };
+
 
 
 
