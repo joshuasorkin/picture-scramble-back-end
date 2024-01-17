@@ -53,10 +53,14 @@ async function storeImage(word, url, language) {
 
 const getRandomImageByLanguage = async (language) => {
   try {
+    console.time('getRandomImageByLanguage');
+    
     const randomWordImages = await WordImage.aggregate([
       { $match: { language: language } },
       { $sample: { size: 1 } }
     ]);
+
+    console.timeEnd('getRandomImageByLanguage');
 
     if (randomWordImages.length > 0) {
       const randomWordImage = randomWordImages[0];
@@ -71,6 +75,7 @@ const getRandomImageByLanguage = async (language) => {
     throw err;
   }
 };
+
 
 
 
