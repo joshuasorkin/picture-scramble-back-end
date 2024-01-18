@@ -32,8 +32,8 @@ class OpenAIAPI {
         if(alreadyShownToday && generateAttempts > 3){
           word = this.getRandomWord();
         }
-        const word_image = await this.OpenAI_utilities.getRandomImageByLanguage(language);
-        if (!word_image){
+        word = await this.OpenAI_utilities.getRandomWordByLanguage(language);
+        if (!word){
           console.log("no doc found in word_image, generating via generateWord()");
           word = await this.generateWord(wordParam,score,language);
         }
