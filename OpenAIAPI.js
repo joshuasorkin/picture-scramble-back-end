@@ -39,7 +39,6 @@ class OpenAIAPI {
         }
         else{
           console.log("found doc in word_image");
-          word = word_image.word;
         }
         console.log({word});
         alreadyShownToday = await this.OpenAI_utilities.wordGeneratedToday(word);
