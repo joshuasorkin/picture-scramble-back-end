@@ -53,8 +53,16 @@ async function storeImage(word, url, language) {
 
 const getRandomWordByLanguage = async (language) => {
   try {
+
+    const explanation = await WordImage.aggregate([
+      { $match: { language: language } },
+      { $sample: { size: 1 } },
+      { $project: { word: 1, _id: 0 } } // Include only the 'word' field
+    ]).explain('executionStats');
+    console.log(JSON.stringify(explanation, null, 2));
+
     console.time('getRandomWordByLanguage');
-    
+
     // Using the aggregation framework to randomly sample documents
     const randomWordImages = await WordImage.aggregate([
       { $match: { language: language } },
