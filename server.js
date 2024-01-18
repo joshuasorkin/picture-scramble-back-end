@@ -51,9 +51,9 @@ async function storeImage(word, url, language) {
    }
 }
 
-const getRandomImageByLanguage = async (language) => {
+const getRandomWordByLanguage = async (language) => {
   try {
-    console.time('getRandomImageByLanguage');
+    console.time('getRandomWordByLanguage');
     
     // Using the aggregation framework to randomly sample documents
     const randomWordImages = await WordImage.aggregate([
@@ -62,7 +62,7 @@ const getRandomImageByLanguage = async (language) => {
       { $project: { word: 1, _id: 0 } } // Include only the 'word' field
     ]);
 
-    console.timeEnd('getRandomImageByLanguage');
+    console.timeEnd('getRandomWordByLanguage');
 
     if (randomWordImages.length > 0) {
       const randomWord = randomWordImages[0].word;
@@ -118,7 +118,7 @@ const OpenAI_utilities = {
   wordGeneratedToday,
   findExistingPicture,
   storeImage,
-  getRandomImageByLanguage
+  getRandomWordByLanguage
 }
 
 const OpenAIAPI_obj = new OpenAIAPI(wordList,OpenAI_utilities);
