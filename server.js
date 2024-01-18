@@ -24,7 +24,7 @@ const WordImage = mongoose.model('WordImage', wordImageSchema);
 
 
 WordImage.aggregate([
-  { $match: { language: language } },
+  { $match: { language: 'English' } },
   { $sample: { size: 1 } }
 ]).explain('executionStats')
   .then(result => console.log(result))
