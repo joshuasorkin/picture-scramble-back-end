@@ -23,14 +23,26 @@ const wordImageSchema = new mongoose.Schema({
 const WordImage = mongoose.model('WordImage', wordImageSchema);
 
 
-WordImage.aggregate([
+const agg = WordImage.aggregate([
   { $match: { language: 'English' } },
   { $sample: { size: 1 } }
-]).cursor().exec().then(cursor => {
-  cursor.explain('executionStats')
-    .then(result => console.log(result))
-    .catch(err => console.error(err));
-}).catch(err => console.error(err));
+]);
+
+const cursor = agg.cursor({ batchSize: 1 }).exec();
+
+cursor.eachAsync(async doc => {
+  console.log(doc); // process each document
+}).then(() => {
+  console.log('All documents processed');
+}).catch(err => {
+  console.error(err);
+});
+
+// For explain, you need to access the native aggregation command
+WordImage.collection.aggregate(agg.pipeline(), { explain: true })
+  .then(result => console.log(result))
+  .catch(err => console.error(err));
+
 
 async function storeImage(word, url, language) {
   try {
