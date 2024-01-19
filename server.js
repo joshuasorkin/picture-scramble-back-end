@@ -23,10 +23,18 @@ const wordImageSchema = new mongoose.Schema({
 const WordImage = mongoose.model('WordImage', wordImageSchema);
 
 function testPing(){
+  // Access the native MongoDB client from the Mongoose connection
+  const nativeClient = mongoose.connection.getClient();
+
+  // Use the `command` function to send an explain command for your aggregation pipeline
+const db = nativeClient.db(process.env.MONGO_DATABASE_NAME)
   const start = Date.now();
-db.runCommand({ ping: 1 });
-const end = Date.now();
-console.log(`Ping command execution time: ${end - start} ms`);
+db.command({ ping: 1 })
+.then(result=>{
+  const end = Date.now();
+  console.log(`Ping command execution time: ${end - start} ms`);
+  
+})
 
 }
 
