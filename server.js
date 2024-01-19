@@ -29,19 +29,20 @@ const aggPipeline = [
   { $sample: { size: 1 } }
 ];
 
-// Access the native MongoDB database object through Mongoose
-const db = WordImage.collection.db;
+// Access the native MongoDB client from the Mongoose connection
+const nativeClient = mongoose.connection.getClient();
 
 // Use the `command` function to send an explain command for your aggregation pipeline
-db.command({
+nativeClient.db(process.env.MONGO_DATABASE_NAME).command({ // replace 'yourDatabaseName' with your actual database name
   explain: {
-    aggregate: WordImage.collection.name, // Use the collection name
+    aggregate: 'word_image', // replace with your actual collection name if different
     pipeline: aggPipeline,
     cursor: {}
   }
 })
 .then(result => console.log(JSON.stringify(result, null, 2)))
 .catch(err => console.error(err));
+
 
 
 
