@@ -26,6 +26,7 @@ function testAggPipeline(){
   // Define your aggregation pipeline
   const aggPipeline = [
     { $match: { language: 'English' } },
+    { $project: { _id: 0, word: 1 } }, // Include only the 'word' field
     { $sample: { size: 1 } }
   ];
 
