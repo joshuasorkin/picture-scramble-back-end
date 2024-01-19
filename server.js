@@ -22,27 +22,27 @@ const wordImageSchema = new mongoose.Schema({
 // Create a model based on the schema
 const WordImage = mongoose.model('WordImage', wordImageSchema);
 
+function testAggPipeline(){
+  // Define your aggregation pipeline
+  const aggPipeline = [
+    { $match: { language: 'English' } },
+    { $sample: { size: 1 } }
+  ];
 
-// Define your aggregation pipeline
-const aggPipeline = [
-  { $match: { language: 'English' } },
-  { $sample: { size: 1 } }
-];
+  // Access the native MongoDB client from the Mongoose connection
+  const nativeClient = mongoose.connection.getClient();
 
-// Access the native MongoDB client from the Mongoose connection
-const nativeClient = mongoose.connection.getClient();
-
-// Use the `command` function to send an explain command for your aggregation pipeline
-nativeClient.db(process.env.MONGO_DATABASE_NAME).command({ // replace 'yourDatabaseName' with your actual database name
-  explain: {
-    aggregate: 'word_image', // replace with your actual collection name if different
-    pipeline: aggPipeline,
-    cursor: {}
-  }
-})
-.then(result => console.log(JSON.stringify(result, null, 2)))
-.catch(err => console.error(err));
-
+  // Use the `command` function to send an explain command for your aggregation pipeline
+  nativeClient.db(process.env.MONGO_DATABASE_NAME).command({ // replace 'yourDatabaseName' with your actual database name
+    explain: {
+      aggregate: 'word_image', // replace with your actual collection name if different
+      pipeline: aggPipeline,
+      cursor: {}
+    }
+  })
+  .then(result => console.log(JSON.stringify(result, null, 2)))
+  .catch(err => console.error(err));
+}
 
 
 
@@ -153,6 +153,8 @@ app.use(cors());
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+testAggPipeline();
+
 
 // Define the Game model
 const gameSchema = new mongoose.Schema({
