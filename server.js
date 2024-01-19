@@ -26,9 +26,11 @@ const WordImage = mongoose.model('WordImage', wordImageSchema);
 WordImage.aggregate([
   { $match: { language: 'English' } },
   { $sample: { size: 1 } }
-]).explain('executionStats')
-  .then(result => console.log(result))
-  .catch(err => console.error(err));
+]).cursor().exec().then(cursor => {
+  cursor.explain('executionStats')
+    .then(result => console.log(result))
+    .catch(err => console.error(err));
+}).catch(err => console.error(err));
 
 async function storeImage(word, url, language) {
   try {
