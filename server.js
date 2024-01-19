@@ -23,25 +23,26 @@ const wordImageSchema = new mongoose.Schema({
 const WordImage = mongoose.model('WordImage', wordImageSchema);
 
 
-const agg = WordImage.aggregate([
+// Define your aggregation pipeline
+const aggPipeline = [
   { $match: { language: 'English' } },
   { $sample: { size: 1 } }
-]);
+];
 
-const cursor = agg.cursor({ batchSize: 1 }).exec();
+// Access the native MongoDB database object through Mongoose
+const db = WordImage.collection.db;
 
-cursor.eachAsync(async doc => {
-  console.log(doc); // process each document
-}).then(() => {
-  console.log('All documents processed');
-}).catch(err => {
-  console.error(err);
-});
+// Use the `command` function to send an explain command for your aggregation pipeline
+db.command({
+  explain: {
+    aggregate: WordImage.collection.name, // Use the collection name
+    pipeline: aggPipeline,
+    cursor: {}
+  }
+})
+.then(result => console.log(JSON.stringify(result, null, 2)))
+.catch(err => console.error(err));
 
-// For explain, you need to access the native aggregation command
-WordImage.collection.aggregate(agg.pipeline(), { explain: true })
-  .then(result => console.log(result))
-  .catch(err => console.error(err));
 
 
 async function storeImage(word, url, language) {
