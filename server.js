@@ -22,6 +22,14 @@ const wordImageSchema = new mongoose.Schema({
 // Create a model based on the schema
 const WordImage = mongoose.model('WordImage', wordImageSchema);
 
+function testPing(){
+  const start = Date.now();
+db.runCommand({ ping: 1 });
+const end = Date.now();
+console.log(`Ping command execution time: ${end - start} ms`);
+
+}
+
 function testAggPipeline(){
   // Define your aggregation pipeline
   const aggPipeline = [
@@ -154,7 +162,7 @@ app.use(cors());
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-testAggPipeline();
+testPing();
 
 
 // Define the Game model
