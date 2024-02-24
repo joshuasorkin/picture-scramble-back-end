@@ -22,6 +22,7 @@ const wordImageSchema = new mongoose.Schema({
 const WordImage = mongoose.model('WordImage', wordImageSchema);
 
 const getRandomWordByLanguage = async (language) => {
+  console.log("looking for random word in",language);
   try {
     // Using the aggregation framework to randomly sample documents
     const randomWordImages = await WordImage.aggregate([
@@ -41,7 +42,6 @@ const getRandomWordByLanguage = async (language) => {
     throw err;
   }
 }
-
 
 
 async function storeImage(word, url, language) {
