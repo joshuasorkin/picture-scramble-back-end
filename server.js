@@ -21,6 +21,29 @@ const wordImageSchema = new mongoose.Schema({
 // Create a model based on the schema
 const WordImage = mongoose.model('WordImage', wordImageSchema);
 
+const getRandomWordImageByLanguage = async (language) => {
+  try {
+    // Using the aggregation framework to randomly sample documents
+    const randomWordImages = await WordImage.aggregate([
+      { $match: { language: language } },
+      { $sample: { size: 1 } }
+    ]);
+    if (randomWordImages.length > 0) {
+      const randomWord = randomWordImages[0].word;
+      console.log(`Random word selected for language: ${language}: ${randomWord}`);
+      return randomWordImages;
+    } else {
+      console.log("No images found for the specified language");
+      return null;
+    }
+  } catch (err) {
+    console.error('Error:', err);
+    throw err;
+  }
+}
+
+
+
 async function storeImage(word, url, language) {
   try {
     console.log("storeImage url:",url);
