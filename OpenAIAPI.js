@@ -28,7 +28,12 @@ class OpenAIAPI {
         if(alreadyShownToday && generateAttempts > 3){
           word = this.getRandomWord();
         }
-        word = await this.generateWord(wordParam,score,language);
+        //start by searching word_image for an existing word in this language
+        word = await this.OpenAI_utilities.getRandomWordByLanguage(language);
+        //if there are no words in this language, we need to generate one
+        if(!word){
+          word = await this.generateWord(wordParam,score,language);
+        }
         console.log({word});
         alreadyShownToday = await this.OpenAI_utilities.wordGeneratedToday(word);
         console.log({alreadyShownToday});

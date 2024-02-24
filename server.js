@@ -109,7 +109,7 @@ const OpenAI_utilities = {
   wordGeneratedToday,
   findExistingPicture,
   storeImage,
-  getRandomWordImageByLanguage
+  getRandomWordByLanguage
 }
 
 const OpenAIAPI_obj = new OpenAIAPI(wordList,OpenAI_utilities);
