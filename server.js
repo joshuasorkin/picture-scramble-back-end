@@ -204,7 +204,8 @@ app.get('/new-game', async (req, res) => {
       const picture = wordAndPicture.picture;
       const compliment = await OpenAIAPI_obj.generateCompliment(word,languageParam);
       const scramble = scramblePhrase(word);
-      const newGame = new Game({ 
+      const newGame = new Game({
+        language: languageParam, 
         solution: word, 
         scramble: scramble, 
         picture: picture,
