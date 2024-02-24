@@ -21,7 +21,7 @@ const wordImageSchema = new mongoose.Schema({
 // Create a model based on the schema
 const WordImage = mongoose.model('WordImage', wordImageSchema);
 
-const getRandomWordImageByLanguage = async (language) => {
+const getRandomWordByLanguage = async (language) => {
   try {
     // Using the aggregation framework to randomly sample documents
     const randomWordImages = await WordImage.aggregate([
@@ -31,7 +31,7 @@ const getRandomWordImageByLanguage = async (language) => {
     if (randomWordImages.length > 0) {
       const randomWord = randomWordImages[0].word;
       console.log(`Random word selected for language: ${language}: ${randomWord}`);
-      return randomWordImages;
+      return randomWord;
     } else {
       console.log("No images found for the specified language");
       return null;
@@ -108,7 +108,8 @@ const wordGeneratedToday = async (word) => {
 const OpenAI_utilities = {
   wordGeneratedToday,
   findExistingPicture,
-  storeImage
+  storeImage,
+  getRandomWordImageByLanguage
 }
 
 const OpenAIAPI_obj = new OpenAIAPI(wordList,OpenAI_utilities);
