@@ -25,24 +25,27 @@ class OpenAIAPI {
     let picture;
     while(!success){
       try{
+        //if can't generate word or get random from language, just select a word from the list
         if(alreadyShownToday && generateAttempts > 3){
           word = this.getRandomWord();
         }
-        //start by searching word_image for an existing word in this language
-        word = await this.OpenAI_utilities.getRandomWordByLanguage(language);
-        //if there are no words in this language, we need to generate one
-        if(!word){
-          word = await this.generateWord(wordParam,score,language);
-        }
-        console.log({word});
-        alreadyShownToday = await this.OpenAI_utilities.wordGeneratedToday(word);
-        console.log({alreadyShownToday});
-        if (alreadyShownToday){
-          generateAttempts++;
-          throw "already shown today";
-        }
-        if (word.length > process.env.WORD_LENGTH_MAX){
-          throw "word too long";
+        else{
+          //start by searching word_image for an existing word in this language
+          word = await this.OpenAI_utilities.getRandomWordByLanguage(language);
+          //if there are no words in this language, we need to generate one
+          if(!word){
+            word = await this.generateWord(wordParam,score,language);
+          }
+          console.log({word});
+          alreadyShownToday = await this.OpenAI_utilities.wordGeneratedToday(word);
+          console.log({alreadyShownToday});
+          if (alreadyShownToday){
+            generateAttempts++;
+            throw "already shown today";
+          }
+          if (word.length > process.env.WORD_LENGTH_MAX){
+            throw "word too long";
+          }
         }
         picture = await this.generatePicture(word,language);
         success = true;
