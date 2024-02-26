@@ -25,6 +25,8 @@ console.log = function(message) {
   appendToLogFile(new Date().toISOString() + ': ' + message);
 };
 
+
+/*
 const wordImageSchema = new mongoose.Schema({
     word: String,
     language: String,
@@ -132,3 +134,36 @@ async function migrateImageData() {
       console.error('Migration failed:', err);
       process.exit(1); // Exit the script with error
     });
+
+    */
+
+    // Schema for the new word collection
+const wordSchema = new mongoose.Schema({
+  word: String
+}, {
+  collection: 'word'
+});
+
+// Model for interacting with the new word collection
+const Word = mongoose.model('Word', wordSchema);
+
+// Function to copy word values to the new collection
+async function copyWords() {
+  try {
+    // Find all documents in the word_images collection
+    const wordImages = await WordImage.find({}).select('word -_id');
+
+    // Transform the data to match the schema of the new collection
+    const wordsToInsert = wordImages.map(doc => ({ word: doc.word }));
+
+    // Insert the transformed data into the new word collection
+    await Word.insertMany(wordsToInsert);
+
+    console.log('Words copied successfully.');
+  } catch (error) {
+    console.error('Error copying words:', error);
+  }
+}
+
+// Call the function to start the copy process
+copyWords();
