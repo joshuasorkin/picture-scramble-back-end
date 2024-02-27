@@ -25,8 +25,6 @@ console.log = function(message) {
   appendToLogFile(new Date().toISOString() + ': ' + message);
 };
 
-
-/*
 const wordImageSchema = new mongoose.Schema({
     word: String,
     language: String,
@@ -124,6 +122,7 @@ async function migrateImageData() {
 
 
 
+  /*
   // Execute the migration function
   migrateImageData()
     .then(() => {
@@ -134,13 +133,13 @@ async function migrateImageData() {
       console.error('Migration failed:', err);
       process.exit(1); // Exit the script with error
     });
-
     */
 
     // Schema for the new word collection
 const wordSchema = new mongoose.Schema({
   word: String
 }, {
+  strict:false,
   collection: 'word'
 });
 
