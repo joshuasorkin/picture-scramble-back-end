@@ -146,17 +146,34 @@ const wordSchema = new mongoose.Schema({
 // Model for interacting with the new word collection
 const Word = mongoose.model('Word', wordSchema);
 
-// Function to copy word values to the new collection
 async function copyWords() {
   try {
-    // Find all documents in the word_images collection
-    const wordImages = await WordImage.find({}).select('word -_id');
+    // Create a cursor for the word_image collection
+    const cursor = WordImage.find({}).select('word -_id').cursor();
 
-    // Transform the data to match the schema of the new collection
-    const wordsToInsert = wordImages.map(doc => ({ word: doc.word }));
+    // Prepare an array to accumulate words to be inserted in batches
+    let wordsBatch = [];
+    const batchSize = 100; // Adjust the batch size as needed
 
-    // Insert the transformed data into the new word collection
-    await Word.insertMany(wordsToInsert);
+    // Use the cursor to iterate through all documents one by one
+    for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
+      console.log("Processing word:",doc.word);
+      // Add the current word to the batch
+      wordsBatch.push({ word: doc.word });
+
+      // Check if the batch size has been reached
+      if (wordsBatch.length >= batchSize) {
+        // Insert the current batch of words into the new collection
+        await Word.insertMany(wordsBatch);
+        // Clear the batch to start accumulating the next set of words
+        wordsBatch = [];
+      }
+    }
+
+    // Insert any remaining words in the final batch (if any)
+    if (wordsBatch.length > 0) {
+      await Word.insertMany(wordsBatch);
+    }
 
     console.log('Words copied successfully.');
   } catch (error) {
