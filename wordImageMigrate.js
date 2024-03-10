@@ -180,6 +180,11 @@ async function copyWords() {
     console.error('Error copying words:', error);
   }
 }
-
+console.log("testing 1 2 3");
 // Call the function to start the copy process
-copyWords();
+
+async function main(){
+  await copyWords();
+}
+
+main();
