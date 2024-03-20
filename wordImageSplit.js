@@ -74,9 +74,6 @@ async function migrateData() {
 
       migratedCount += 1;
       console.log(`Migrated documents: ${migratedCount}/${totalDocuments}`);
-      if(migratedCount >= 3){
-        return;
-      }
     }
   }
   
