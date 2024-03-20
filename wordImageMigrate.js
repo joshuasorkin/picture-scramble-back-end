@@ -148,13 +148,15 @@ const Word = mongoose.model('Word', wordSchema);
 
 async function copyWords() {
   try {
+    console.log("beginning copyWords...")
+
     // Create a cursor for the word_image collection
     const cursor = WordImage.find({}).select('word -_id').cursor();
 
     // Prepare an array to accumulate words to be inserted in batches
     let wordsBatch = [];
     const batchSize = 100; // Adjust the batch size as needed
-
+    console.log("reached iteration");
     // Use the cursor to iterate through all documents one by one
     for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
       console.log("Processing word:",doc.word);
