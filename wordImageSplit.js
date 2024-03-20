@@ -58,15 +58,15 @@ async function migrateData() {
 
     const totalDocuments = await WordImage.countDocuments();
     console.log(`Total documents to migrate: ${totalDocuments}`);
-    const wordImages = await WordImage.find(); // Assuming WordImage is your model for the original collection
+    const cursor = WordImage.find().cursor();
     let migratedCount = 0;
 
-    for (let wi of wordImages) {
+    for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
 
-      const newImage = new Image({ images: wi.images });
+      const newImage = new Image({ images: doc.images });
       await newImage.save();
   
-      const newWord = new Word({ word: wi.word, language: wi.language, imageRef: newImage._id });
+      const newWord = new Word({ word: doc.word, language: doc.language, imageRef: newImage._id });
       await newWord.save();
   
       newImage.wordRef = newWord._id;
