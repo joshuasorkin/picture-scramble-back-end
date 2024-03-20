@@ -65,9 +65,10 @@ async function migrateData() {
 
     for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
         // Check if the document already exists in the new collections by GUID
-        const existingMigration = await Word.findOne({ wordImageRef: doc._id.toString() });
+        const docId = doc._id.toString();
+        const existingMigration = await Word.findOne({ wordImageRef: docId });
         if (!existingMigration) {
-            const docId = doc._id.toString();
+            
             const newImage = new Image({ images: doc.images, wordImageRef: docId });
             await newImage.save();
         
