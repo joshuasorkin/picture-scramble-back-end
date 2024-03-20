@@ -38,12 +38,14 @@ const wordImageSchema = new mongoose.Schema({
 
 const wordSchema = new Schema({
   word: String,
+  wordImageRef: { type: String, required: true },
   language: String,
   imageRef: { type: Schema.Types.ObjectId, ref: 'Image' }
 });
 
 const imageSchema = new Schema({
   images: [Buffer],
+  wordImageRef: { type: String, required: true },
   wordRef: { type: Schema.Types.ObjectId, ref: 'Word' }
 });
 
@@ -62,18 +64,25 @@ async function migrateData() {
     let migratedCount = 0;
 
     for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
-
-      const newImage = new Image({ images: doc.images });
-      await newImage.save();
-  
-      const newWord = new Word({ word: doc.word, language: doc.language, imageRef: newImage._id });
-      await newWord.save();
-  
-      newImage.wordRef = newWord._id;
-      await newImage.save();
-
-      migratedCount += 1;
-      console.log(`Migrated documents: ${migratedCount}/${totalDocuments}`);
+        // Check if the document already exists in the new collections by GUID
+        const existingMigration = await Word.findOne({ wordImageRef: doc._id.toString() });
+        if (!existingMigration) {
+            const docId = doc._id.toString();
+            const newImage = new Image({ images: doc.images, wordImageRef: docId });
+            await newImage.save();
+        
+            const newWord = new Word({ word: doc.word, language: doc.language, wordImageRef: docId, imageRef: newImage._id });
+            await newWord.save();
+        
+            newImage.wordRef = newWord._id;
+            await newImage.save();
+            console.log(`Successfully migrated GUID: ${docId}`);
+        }
+        else{
+            console.log(`Skipping existing migration for GUID: ${docId}`);
+        }
+        migratedCount++;
+        console.log(`Migrated documents: ${migratedCount}/${totalDocuments}`);
     }
   }
   
