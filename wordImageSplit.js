@@ -52,13 +52,15 @@ const WordImage = mongoose.model('WordImage', wordImageSchema);
 // Assuming you already have a model for word_image
 
 async function migrateData() {
+    // Connect to MongoDB
+    await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
     const wordImages = await WordImage.find(); // Assuming WordImage is your model for the original collection
   
     for (let wi of wordImages) {
       const newImage = new Image({ images: wi.images });
       await newImage.save();
   
-      const newWord = new Word({ word: wi.word, imageRef: newImage._id });
+      const newWord = new Word({ word: wi.word, language: wi.language, imageRef: newImage._id });
       await newWord.save();
   
       newImage.wordRef = newWord._id;
