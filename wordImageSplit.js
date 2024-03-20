@@ -55,9 +55,14 @@ const WordImage = mongoose.model('WordImage', wordImageSchema);
 async function migrateData() {
     // Connect to MongoDB
     await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+    const totalDocuments = await WordImage.countDocuments();
+    console.log(`Total documents to migrate: ${totalDocuments}`);
     const wordImages = await WordImage.find(); // Assuming WordImage is your model for the original collection
-  
+    let migratedCount = 0;
+
     for (let wi of wordImages) {
+
       const newImage = new Image({ images: wi.images });
       await newImage.save();
   
@@ -66,6 +71,9 @@ async function migrateData() {
   
       newImage.wordRef = newWord._id;
       await newImage.save();
+
+      migratedCount += 1;
+      console.log(`Migrated documents: ${migratedCount}/${totalDocuments}`);
     }
   }
   
