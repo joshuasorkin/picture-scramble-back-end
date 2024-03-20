@@ -38,6 +38,7 @@ const wordImageSchema = new mongoose.Schema({
 
 const wordSchema = new Schema({
   word: String,
+  language: String,
   imageRef: { type: Schema.Types.ObjectId, ref: 'Image' }
 });
 
