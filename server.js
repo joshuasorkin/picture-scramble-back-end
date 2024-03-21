@@ -33,6 +33,8 @@ const imageSchema = new Schema({
 
 // Create a model based on the schema
 const WordImage = mongoose.model('WordImage', wordImageSchema);
+const Word = mongoose.model('Word', wordSchema);
+const Image = mongoose.model('Image', imageSchema);
 
 const getRandomWordByLanguage = async (language) => {
   console.log("looking for random word in",language);
