@@ -58,6 +58,10 @@ const getRandomWordByLanguage = async (language) => {
   }
 }
 
+async function testRandomWord(){
+  const word = await getRandomWordByLanguage("English");
+  console.log("random word:", word);
+}
 
 async function storeImage(word, url, language) {
   try {
@@ -135,6 +139,9 @@ app.use(cors());
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+testRandomWord();
+
 
 // Define the Game model
 const gameSchema = new mongoose.Schema({
