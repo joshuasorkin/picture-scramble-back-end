@@ -40,12 +40,12 @@ const getRandomWordByLanguage = async (language) => {
   console.log("looking for random word in",language);
   try {
     // Using the aggregation framework to randomly sample documents
-    const randomWordImages = await WordImage.aggregate([
+    const randomWordDoc = await Word.aggregate([
       { $match: { language: language } },
       { $sample: { size: 1 } }
     ]);
-    if (randomWordImages.length > 0) {
-      const randomWord = randomWordImages[0].word;
+    if (randomWordDoc.length > 0) {
+      const randomWord = randomWordDoc[0].word;
       console.log(`Random word selected for language: ${language}: ${randomWord}`);
       return randomWord;
     } else {
