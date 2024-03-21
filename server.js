@@ -18,6 +18,19 @@ const wordImageSchema = new mongoose.Schema({
   collection:'word_image'
 });
 
+const wordSchema = new Schema({
+  word: String,
+  wordImageRef: { type: String, required: true },
+  language: String,
+  imageRef: { type: Schema.Types.ObjectId, ref: 'Image' }
+});
+
+const imageSchema = new Schema({
+  images: [Buffer],
+  wordImageRef: { type: String, required: true },
+  wordRef: { type: Schema.Types.ObjectId, ref: 'Word' }
+});
+
 // Create a model based on the schema
 const WordImage = mongoose.model('WordImage', wordImageSchema);
 
