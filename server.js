@@ -8,9 +8,10 @@ import fetch from 'node-fetch';
 dotenv.config();
 
 const wordList = fs.readFileSync(process.env.WORDLIST_FILE,'utf8').split('\n');
+const Schema = mongoose.Schema;
 
 // Define a schema for the word_images collection
-const wordImageSchema = new mongoose.Schema({
+const wordImageSchema = new Schema({
   word: String,
   images: [Buffer] // Array of images stored as Buffers
 },{
@@ -18,14 +19,14 @@ const wordImageSchema = new mongoose.Schema({
   collection:'word_image'
 });
 
-const wordSchema = new mongoose.Schema({
+const wordSchema = new Schema({
   word: String,
   wordImageRef: { type: String, required: true },
   language: String,
   imageRef: { type: Schema.Types.ObjectId, ref: 'Image' }
 });
 
-const imageSchema = new mongoose.Schema({
+const imageSchema = new Schema({
   images: [Buffer],
   wordImageRef: { type: String, required: true },
   wordRef: { type: Schema.Types.ObjectId, ref: 'Word' }
