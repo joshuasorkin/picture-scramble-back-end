@@ -18,14 +18,14 @@ const wordImageSchema = new mongoose.Schema({
   collection:'word_image'
 });
 
-const wordSchema = new Schema({
+const wordSchema = new mongoose.Schema({
   word: String,
   wordImageRef: { type: String, required: true },
   language: String,
   imageRef: { type: Schema.Types.ObjectId, ref: 'Image' }
 });
 
-const imageSchema = new Schema({
+const imageSchema = new mongoose.Schema({
   images: [Buffer],
   wordImageRef: { type: String, required: true },
   wordRef: { type: Schema.Types.ObjectId, ref: 'Word' }
