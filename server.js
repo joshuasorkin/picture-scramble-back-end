@@ -155,9 +155,6 @@ app.use(cors());
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-testRandomWord();
-
-
 // Define the Game model
 const gameSchema = new mongoose.Schema({
   language: String,
