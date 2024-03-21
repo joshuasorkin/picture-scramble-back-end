@@ -59,11 +59,6 @@ const getRandomWordByLanguage = async (language) => {
   }
 }
 
-async function testRandomWord(){
-  const word = await getRandomWordByLanguage("English");
-  console.log("random word:", word);
-}
-
 async function storeImage(word, url, language) {
   try {
     console.log("storeImage url:",url);
@@ -75,19 +70,32 @@ async function storeImage(word, url, language) {
      const arrayBuffer = await response.arrayBuffer();
      const imageBuffer = Buffer.from(arrayBuffer);
  
-     let wordDoc = await WordImage.findOne({ 
-        word: word,
-        language: language
+     // Find or create the Word document
+    let wordDoc = await Word.findOne({ word: word, language: language });
+    if (!wordDoc) {
+      // If the word doesn't exist, create a new document
+      // Note: Initially, we don't set the imageRef here because it will be set after creating the Image document
+      wordDoc = new Word({ word: word, language: language });
+    }
+
+    if (!imageDoc) {
+      // If there's no existing Image document, create a new one
+      imageDoc = new Image({
+        images: [imageBuffer], // Storing the image buffer here
+        wordImageRef: word, // Assuming you're using the word as a reference; adjust as needed
+        wordRef: wordDoc._id, // Linking the new Image document to the Word document
       });
- 
-     if (wordDoc) {
-       wordDoc.images.push(imageBuffer);
-       await wordDoc.save();
-     } else {
-       wordDoc = new WordImage({ word: word, images: [imageBuffer], language:language});
-       await wordDoc.save();
-     }
-     console.log("image saved")
+    } else {
+      // If an existing Image document was found, update it (for simplicity, adding to the array)
+      imageDoc.images.push(imageBuffer);
+    }
+
+    await imageDoc.save();
+
+    // Ensure the Word document references this Image document
+    wordDoc.imageRef = imageDoc._id;
+    await wordDoc.save();
+     console.log("image stored")
    } catch (err) {
      console.error('Error:', err);
    }
@@ -95,9 +103,9 @@ async function storeImage(word, url, language) {
 
 const findExistingPicture = async (word) => {
   try {
-    const wordDoc = await WordImage.findOne({ word: word });
+    const wordDoc = await Word.findOne({ word: word });
 
-    if (!wordDoc || wordDoc.images.length === 0) {
+    if (!wordDoc || !wordDoc.imageRef) {
       console.log("No existing image found");
       return null; // No matching document or no images found
     }
