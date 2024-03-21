@@ -72,17 +72,23 @@ async function storeImage(word, url, language) {
  
      // Find or create the Word document
     let wordDoc = await Word.findOne({ word: word, language: language });
-    if (!wordDoc) {
+
+    let imageDoc = null;
+
+    if (!wordDoc || !wordDoc.imageRef) {
       // If the word doesn't exist, create a new document
       // Note: Initially, we don't set the imageRef here because it will be set after creating the Image document
       wordDoc = new Word({ word: word, language: language });
+      wordDoc.save();
+    }
+    else{
+        imageDoc = await Image.findById(wordDoc.imageRef);
     }
 
     if (!imageDoc) {
       // If there's no existing Image document, create a new one
       imageDoc = new Image({
         images: [imageBuffer], // Storing the image buffer here
-        wordImageRef: word, // Assuming you're using the word as a reference; adjust as needed
         wordRef: wordDoc._id, // Linking the new Image document to the Word document
       });
     } else {
@@ -290,15 +296,15 @@ app.get('/image/:word', async (req, res) => {
   try {
       console.log("retrieving image from server...");
       const word = req.params.word;
-      const wordDoc = await WordImage.findOne({ word: word });
-      if (wordDoc && wordDoc.images.length > 0) {
-          console.log("image count:",wordDoc.images.length);
+      const wordDoc = await Word.findOne({ word: word });
+      if (wordDoc && wordDoc.imageRef) {
+          const imageDoc = await Image.findById(wordDoc.imageRef);
+          console.log("image count:",imageDoc.images.length);
           // Generate a random index
           const randomIndex = Math.floor(Math.random() * wordDoc.images.length);
           console.log("random image index",randomIndex);
           // Get the image at the random index
-          const imageBuffer = wordDoc.images[randomIndex];
-
+          const imageBuffer = imageDoc.images[randomIndex];
           res.setHeader('Content-Type', 'image/png');
           res.send(imageBuffer);
       } else {
