@@ -366,7 +366,7 @@ app.post('/upload', upload.single('image'), async (req, res) => {
       language = req.body.language;
     }
     await storeImage(word,null,language,req.file.buffer);
-    res.status(201).send({ id: result.insertedId });
+    res.status(201).send({ message: "image stored" });
   } catch (error) {
     console.error(error);
     res.status(500).send('Error processing the image.');
