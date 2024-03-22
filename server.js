@@ -370,8 +370,6 @@ app.post('/upload', upload.single('image'), async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send('Error processing the image.');
-  } finally {
-    await client.close();
   }
 });
 
