@@ -100,6 +100,7 @@ async function storeImage(word, url = null, language, buffer = null) {
       try {
         // Convert the uploaded image to PNG format
         imageBuffer = await sharp(buffer).png().toBuffer();
+        console.log("image converted to buffer");
       }
       catch{
         throw new Error(`Error converting image to PNG buffer:${word}`);
@@ -125,12 +126,14 @@ async function storeImage(word, url = null, language, buffer = null) {
     }
 
     if (!imageDoc) {
+      console.log("no imagedoc found, creating new");
       // If there's no existing Image document, create a new one
       imageDoc = new ImageTest({
         images: [imageBuffer], // Storing the image buffer here
         wordRef: wordDoc._id, // Linking the new Image document to the Word document
       });
     } else {
+      console.log("pushing to existing imagedoc");
       // If an existing Image document was found, update it (for simplicity, adding to the array)
       imageDoc.images.push(imageBuffer);
     }
