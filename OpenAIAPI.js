@@ -47,6 +47,7 @@ class OpenAIAPI {
             throw "word too long";
           }
         }
+        word = "decompose";
         picture = await this.generatePicture(word,language);
         success = true;
       }
