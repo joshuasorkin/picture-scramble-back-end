@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import fs from 'fs';
 import fetch from 'node-fetch';
+import multer from 'multer';
+import sharp from 'sharp';
 dotenv.config();
 
 const wordList = fs.readFileSync(process.env.WORDLIST_FILE,'utf8').split('\n');
@@ -313,7 +315,7 @@ app.get('/image/:word', async (req, res) => {
   }
 });
 
-
+app.post('/upload-puzzle',)
 
 
 //retrieve the document for a game with a given ID
