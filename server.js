@@ -335,9 +335,9 @@ app.get('/image/:word', async (req, res) => {
   try {
       console.log("retrieving image from server...");
       const word = req.params.word;
-      const wordDoc = await Word.findOne({ word: word });
+      const wordDoc = await WordTest.findOne({ word: word });
       if (wordDoc && wordDoc.imageRef) {
-          const imageDoc = await Image.findById(wordDoc.imageRef);
+          const imageDoc = await ImageTest.findById(wordDoc.imageRef);
           console.log("image count:",imageDoc.images.length);
           // Generate a random index
           const randomIndex = Math.floor(Math.random() * imageDoc.images.length);
