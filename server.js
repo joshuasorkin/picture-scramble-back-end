@@ -354,10 +354,12 @@ app.get('/image/:word', async (req, res) => {
           // Start by looking for uploaded image indexes
           if (imageDoc.uploadedIndexes && imageDoc.uploadedIndexes.length > 0){
             console.log("getting uploadedIndex");
+            //select a random index from the uploaded indexes
             const randomUploadedIndex = Math.floor(Math.random() * imageDoc.uploadedIndexes.length);
             randomIndex = uploadedIndexes[randomUploadedIndex];
             console.log("random image index from uploadedIndexes:",randomIndex);
           }
+          //if no uploaded indexes available, get a random index from the entire images array
           else{
             randomIndex = Math.floor(Math.random() * imageDoc.images.length);
             console.log("random image index",randomIndex);
