@@ -9,6 +9,12 @@ import multer from 'multer';
 import sharp from 'sharp';
 dotenv.config();
 
+// Configure Multer with a file size limit and memory storage
+const upload = multer({ 
+  storage: multer.memoryStorage(), 
+  limits: { fileSize: 16 * 1024 * 1024 } // 16 MB limit
+});
+
 const wordList = fs.readFileSync(process.env.WORDLIST_FILE,'utf8').split('\n');
 const Schema = mongoose.Schema;
 
@@ -61,16 +67,18 @@ const getRandomWordByLanguage = async (language) => {
   }
 }
 
-async function storeImage(word, url, language) {
+async function storeImage(word, url = null, language, buffer = null) {
   try {
     console.log("storeImage url:",url);
      // Use fetch to download the image
-     const response = await fetch(url);
-     if (!response.ok) {
-       throw new Error(`Failed to fetch image: ${response.statusText}`);
+     if (url){
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch image: ${response.statusText}`);
+      }
+      const arrayBuffer = await response.arrayBuffer();
+      const imageBuffer = Buffer.from(arrayBuffer);
      }
-     const arrayBuffer = await response.arrayBuffer();
-     const imageBuffer = Buffer.from(arrayBuffer);
  
      // Find or create the Word document
     let wordDoc = await Word.findOne({ word: word, language: language });
@@ -315,7 +323,31 @@ app.get('/image/:word', async (req, res) => {
   }
 });
 
-app.post('/upload-puzzle',)
+app.post('/upload', upload.single('image'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('No file uploaded.');
+  }
+  const word = req.body.word;
+
+
+  try {
+    // Convert the uploaded image to PNG format
+    const pngBuffer = await sharp(req.file.buffer).png().toBuffer();
+
+    // Insert the PNG buffer into the MongoDB collection
+    const result = await images.insertOne({
+      contentType: 'image/png',
+      image: pngBuffer,
+    });
+
+    res.status(201).send({ id: result.insertedId });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error processing the image.');
+  } finally {
+    await client.close();
+  }
+});
 
 
 //retrieve the document for a game with a given ID
