@@ -79,6 +79,12 @@ async function storeImage(word, url = null, language, buffer = null) {
       const arrayBuffer = await response.arrayBuffer();
       const imageBuffer = Buffer.from(arrayBuffer);
      }
+     else if(buffer){
+
+     }
+     else{
+      throw new Error(`No image URL or buffer provided for '${word}'.`);
+     }
  
      // Find or create the Word document
     let wordDoc = await Word.findOne({ word: word, language: language });
