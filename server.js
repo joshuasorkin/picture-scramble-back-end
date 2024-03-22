@@ -142,6 +142,8 @@ async function storeImage(word, url = null, language, buffer = null,uploaded = f
       // If an existing Image document was found, update it (for simplicity, adding to the array)
       imageDoc.images.push(imageBuffer);
     }
+    const newImageIndex = imageDoc.images.length - 1;
+    imageDoc.uploadedIndexes.push(newImageIndex);
 
     await imageDoc.save();
     console.log("Image document created with _id:", imageDoc._id); // Output _id of wordDoc
