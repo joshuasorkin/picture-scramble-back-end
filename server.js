@@ -70,6 +70,7 @@ const getRandomWordByLanguage = async (language) => {
 async function storeImage(word, url = null, language, buffer = null) {
   try {
     console.log("storeImage url:",url);
+    let imageBuffer = null;
      // Use fetch to download the image
      if (url){
       const response = await fetch(url);
@@ -77,10 +78,16 @@ async function storeImage(word, url = null, language, buffer = null) {
         throw new Error(`Failed to fetch image: ${response.statusText}`);
       }
       const arrayBuffer = await response.arrayBuffer();
-      const imageBuffer = Buffer.from(arrayBuffer);
+      imageBuffer = Buffer.from(arrayBuffer);
      }
      else if(buffer){
-
+      try {
+        // Convert the uploaded image to PNG format
+        imageBuffer = await sharp(buffer).png().toBuffer();
+      }
+      catch{
+        throw new Error(`Error converting image to PNG buffer:${word}`);
+      }
      }
      else{
       throw new Error(`No image URL or buffer provided for '${word}'.`);
@@ -330,22 +337,19 @@ app.get('/image/:word', async (req, res) => {
 });
 
 app.post('/upload', upload.single('image'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).send('No file uploaded.');
-  }
-  const word = req.body.word;
-
-
-  try {
-    // Convert the uploaded image to PNG format
-    const pngBuffer = await sharp(req.file.buffer).png().toBuffer();
-
-    // Insert the PNG buffer into the MongoDB collection
-    const result = await images.insertOne({
-      contentType: 'image/png',
-      image: pngBuffer,
-    });
-
+  try{
+    if (!req.file) {
+      return res.status(400).send('No file uploaded.');
+    }
+    const word = req.body.word;
+    let language;
+    if(!req.body.language){
+      language = process.env.DEFAULT_LANGUAGE;
+    }
+    else{
+      language = req.body.language;
+    }
+    await storeImage(word,null,language,req.file.buffer);
     res.status(201).send({ id: result.insertedId });
   } catch (error) {
     console.error(error);
