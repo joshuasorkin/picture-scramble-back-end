@@ -115,7 +115,8 @@ async function storeImage(word, url = null, language, buffer = null) {
       // If the word doesn't exist, create a new document
       // Note: Initially, we don't set the imageRef here because it will be set after creating the Image document
       wordDoc = new WordModel({ word: word, language: language });
-      wordDoc.save();
+      await wordDoc.save();
+      console.log("Word document created with _id:", wordDoc._id); // Output _id of wordDoc
     }
     else{
         imageDoc = await ImageModel.findById(wordDoc.imageRef);
@@ -135,6 +136,7 @@ async function storeImage(word, url = null, language, buffer = null) {
     }
 
     await imageDoc.save();
+    console.log("Image document created with _id:", imageDoc._id); // Output _id of wordDoc
 
     // Ensure the Word document references this Image document
     wordDoc.imageRef = imageDoc._id;
@@ -333,9 +335,9 @@ app.get('/image/:word', async (req, res) => {
   try {
       console.log("retrieving image from server...");
       const word = req.params.word;
-      const wordDoc = await Word.findOne({ word: word });
+      const wordDoc = await WordTest.findOne({ word: word });
       if (wordDoc && wordDoc.imageRef) {
-          const imageDoc = await Image.findById(wordDoc.imageRef);
+          const imageDoc = await ImageTest.findById(wordDoc.imageRef);
           console.log("image count:",imageDoc.images.length);
           // Generate a random index
           const randomIndex = Math.floor(Math.random() * imageDoc.images.length);
