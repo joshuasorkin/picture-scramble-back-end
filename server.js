@@ -29,14 +29,14 @@ const wordImageSchema = new Schema({
 
 const wordSchema = new Schema({
   word: String,
-  wordImageRef: { type: String, required: true },
+  wordImageRef: { type: String, required: false },
   language: String,
   imageRef: { type: Schema.Types.ObjectId, ref: 'Image' }
 });
 
 const imageSchema = new Schema({
   images: [Buffer],
-  wordImageRef: { type: String, required: true },
+  wordImageRef: { type: String, required: false },
   wordRef: { type: Schema.Types.ObjectId, ref: 'Word' }
 });
 
