@@ -40,10 +40,26 @@ const imageSchema = new Schema({
   wordRef: { type: Schema.Types.ObjectId, ref: 'Word' }
 });
 
+const wordTestSchema = new Schema({
+  word: String,
+  language: String,
+  imageRef: { type: Schema.Types.ObjectId, ref: 'ImageTest' }
+});
+
+const imageTestSchema = new Schema({
+  images: [Buffer],
+  wordRef: { type: Schema.Types.ObjectId, ref: 'WordTest' }
+});
+
+
+
+
 // Create a model based on the schema
 const WordImage = mongoose.model('WordImage', wordImageSchema);
 const Word = mongoose.model('Word', wordSchema);
 const Image = mongoose.model('Image', imageSchema);
+const WordTest = mongoose.model('WordTest', wordTestSchema);
+const ImageTest = mongoose.model('ImageTest', imageTestSchema);
 
 const getRandomWordByLanguage = async (language) => {
   console.log("looking for random word in",language);
