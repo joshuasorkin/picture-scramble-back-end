@@ -97,14 +97,7 @@ async function storeImage(word, url = null, language, buffer = null) {
       imageBuffer = Buffer.from(arrayBuffer);
      }
      else if(buffer){
-      try {
-        // Convert the uploaded image to PNG format
-        imageBuffer = await sharp(buffer).png().toBuffer();
-        console.log("image converted to buffer");
-      }
-      catch{
-        throw new Error(`Error converting image to PNG buffer:${word}`);
-      }
+      imageBuffer = buffer;
      }
      else{
       throw new Error(`No image URL or buffer provided for '${word}'.`);
@@ -370,7 +363,10 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     else{
       language = req.body.language;
     }
-    const result = await storeImage(word,null,language,req.file.buffer);
+
+    const buffer = await sharp(req.file.buffer).png().toBuffer();
+
+    const result = await storeImage(word,null,language,buffer);
     if (result) {
       res.status(201).send({ message: "image stored" });
     }
