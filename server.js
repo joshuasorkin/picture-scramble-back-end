@@ -365,7 +365,10 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     }
 
     const buffer = await sharp(req.file.buffer).png().toBuffer();
-
+    if (buffer.length > 16 * 1024 * 1024) {
+      throw new Error("Buffer exceeds the MongoDB document size limit.");
+      // Handle the error: perhaps by compressing the image further, splitting it, or using GridFS.
+    }
     const result = await storeImage(word,null,language,buffer);
     if (result) {
       res.status(201).send({ message: "image stored" });
