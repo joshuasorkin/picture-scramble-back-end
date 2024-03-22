@@ -44,7 +44,8 @@ const imageSchema = new Schema({
 const wordTestSchema = new Schema({
   word: String,
   language: String,
-  imageRef: { type: Schema.Types.ObjectId, ref: 'ImageTest' }
+  imageRef: { type: Schema.Types.ObjectId, ref: 'ImageTest' },
+  uploaded: Boolean
 });
 
 const imageTestSchema = new Schema({
