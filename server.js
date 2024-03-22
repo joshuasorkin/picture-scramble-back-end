@@ -38,6 +38,7 @@ const wordSchema = new Schema({
 const imageSchema = new Schema({
   images: [Buffer],
   wordImageRef: { type: String, required: false },
+  uploadedIndexes: [],
   wordRef: { type: Schema.Types.ObjectId, ref: 'Word' }
 });
 
@@ -50,6 +51,7 @@ const wordTestSchema = new Schema({
 
 const imageTestSchema = new Schema({
   images: [Buffer],
+  uploadedIndexes:[],
   wordRef: { type: Schema.Types.ObjectId, ref: 'WordTest' }
 });
 
