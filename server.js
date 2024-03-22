@@ -85,6 +85,9 @@ const getRandomWordByLanguage = async (language) => {
 
 async function storeImage(word, url = null, language, buffer = null) {
   try {
+    //allows us to divert input to test collections
+    const WordModel = WordTest;
+    const ImageModel = ImageTest;
     console.log("storeImage url:",url);
     let imageBuffer = null;
      // Use fetch to download the image
@@ -104,24 +107,24 @@ async function storeImage(word, url = null, language, buffer = null) {
      }
  
      // Find or create the Word document
-    let wordDoc = await WordTest.findOne({ word: word, language: language });
+    let wordDoc = await WordModel.findOne({ word: word, language: language });
 
     let imageDoc = null;
 
     if (!wordDoc || !wordDoc.imageRef) {
       // If the word doesn't exist, create a new document
       // Note: Initially, we don't set the imageRef here because it will be set after creating the Image document
-      wordDoc = new Word({ word: word, language: language });
+      wordDoc = new WordModel({ word: word, language: language });
       wordDoc.save();
     }
     else{
-        imageDoc = await Image.findById(wordDoc.imageRef);
+        imageDoc = await ImageModel.findById(wordDoc.imageRef);
     }
 
     if (!imageDoc) {
       console.log("no imagedoc found, creating new");
       // If there's no existing Image document, create a new one
-      imageDoc = new Image({
+      imageDoc = new ImageModel({
         images: [imageBuffer], // Storing the image buffer here
         wordRef: wordDoc._id, // Linking the new Image document to the Word document
       });
