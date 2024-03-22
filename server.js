@@ -86,8 +86,8 @@ const getRandomWordByLanguage = async (language) => {
 async function storeImage(word, url = null, language, buffer = null) {
   try {
     //allows us to divert input to test collections
-    const WordModel = WordTest;
-    const ImageModel = ImageTest;
+    const WordModel = Word;
+    const ImageModel = Image;
     console.log("storeImage url:",url);
     let imageBuffer = null;
      // Use fetch to download the image
@@ -335,9 +335,9 @@ app.get('/image/:word', async (req, res) => {
   try {
       console.log("retrieving image from server...");
       const word = req.params.word;
-      const wordDoc = await WordTest.findOne({ word: word });
+      const wordDoc = await Word.findOne({ word: word });
       if (wordDoc && wordDoc.imageRef) {
-          const imageDoc = await ImageTest.findById(wordDoc.imageRef);
+          const imageDoc = await Image.findById(wordDoc.imageRef);
           console.log("image count:",imageDoc.images.length);
           // Generate a random index
           const randomIndex = Math.floor(Math.random() * imageDoc.images.length);
