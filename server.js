@@ -86,8 +86,8 @@ const getRandomWordByLanguage = async (language) => {
 async function storeImage(word, url = null, language, buffer = null) {
   try {
     //allows us to divert input to test collections
-    const WordModel = Word;
-    const ImageModel = Image;
+    const WordModel = WordTest;
+    const ImageModel = ImageTest;
     console.log("storeImage url:",url);
     let imageBuffer = null;
      // Use fetch to download the image
@@ -357,6 +357,11 @@ app.get('/image/:word', async (req, res) => {
 
 app.post('/upload', upload.single('image'), async (req, res) => {
   try{
+    const upload_key = req.body.upload_key;
+    //stub security until we implement identity management
+    if(upload_key !== process.env.UPLOAD_KEY){
+      return res.status(400).send('Incorrect upload key.');
+    }
     if (!req.file) {
       return res.status(400).send('No file uploaded.');
     }
