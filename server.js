@@ -110,23 +110,23 @@ async function storeImage(word, url = null, language, buffer = null) {
      }
  
      // Find or create the Word document
-    let wordDoc = await Word.findOne({ word: word, language: language });
+    let wordDoc = await WordTest.findOne({ word: word, language: language });
 
     let imageDoc = null;
 
     if (!wordDoc || !wordDoc.imageRef) {
       // If the word doesn't exist, create a new document
       // Note: Initially, we don't set the imageRef here because it will be set after creating the Image document
-      wordDoc = new Word({ word: word, language: language });
+      wordDoc = new WordTest({ word: word, language: language });
       wordDoc.save();
     }
     else{
-        imageDoc = await Image.findById(wordDoc.imageRef);
+        imageDoc = await ImageTest.findById(wordDoc.imageRef);
     }
 
     if (!imageDoc) {
       // If there's no existing Image document, create a new one
-      imageDoc = new Image({
+      imageDoc = new ImageTest({
         images: [imageBuffer], // Storing the image buffer here
         wordRef: wordDoc._id, // Linking the new Image document to the Word document
       });
