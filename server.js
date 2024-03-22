@@ -31,7 +31,8 @@ const wordSchema = new Schema({
   word: String,
   wordImageRef: { type: String, required: false },
   language: String,
-  imageRef: { type: Schema.Types.ObjectId, ref: 'Image' }
+  imageRef: { type: Schema.Types.ObjectId, ref: 'Image' },
+  uploaded: Boolean
 });
 
 const imageSchema = new Schema({
