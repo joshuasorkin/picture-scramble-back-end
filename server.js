@@ -143,9 +143,11 @@ async function storeImage(word, url = null, language, buffer = null) {
     // Ensure the Word document references this Image document
     wordDoc.imageRef = imageDoc._id;
     await wordDoc.save();
-     console.log("image stored")
+     console.log("image stored");
+     return true;
    } catch (err) {
      console.error('Error:', err);
+     return false;
    }
 }
 
@@ -368,8 +370,13 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     else{
       language = req.body.language;
     }
-    await storeImage(word,null,language,req.file.buffer);
-    res.status(201).send({ message: "image stored" });
+    const result = await storeImage(word,null,language,req.file.buffer);
+    if (result) {
+      res.status(201).send({ message: "image stored" });
+    }
+    else{
+      res.status(201).send({ message: "error storing image"});
+    }
   } catch (error) {
     console.error(error);
     res.status(500).send('Error processing the image.');
