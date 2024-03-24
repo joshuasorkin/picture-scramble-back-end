@@ -418,8 +418,8 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     const email = req.body.email;
     const socialMediaPlatform = req.body.socialMediaPlatform;
     const socialMediaHandle = req.body.socialMediaHandle;
-    const contact = contactInfo.createContact(name,phone,email,platform,handle);
-
+    const contact = contactInfo.createContact(name,phone,email,socialMediaplatform,socialMediaHandle);
+    console.log({contact});
     res.status(201).send({ message: "upload ok" });
     return;
 
