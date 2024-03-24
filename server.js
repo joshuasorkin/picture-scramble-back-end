@@ -152,8 +152,8 @@ async function storeImage(word, url = null, language, buffer = null,uploaded = f
       imageDoc.images.push(imageBuffer);
     }
     if(uploaded){
-      const newImageIndex = imageDoc.images.length - 1;
-      imageDoc.uploadedIndexes.push({newImageIndex,contact});
+      const imageIndex = imageDoc.images.length - 1;
+      imageDoc.uploadedIndexes.push({imageIndex,contact});
     }
 
     await imageDoc.save();
