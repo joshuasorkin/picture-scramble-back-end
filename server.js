@@ -12,7 +12,6 @@ import ContactInfo from './contact-info.js';
 
 dotenv.config();
 const contactInfo = new ContactInfo();
-console.log(contactInfo.default);
 
 // Configure Multer with a file size limit and memory storage
 const upload = multer({ 
