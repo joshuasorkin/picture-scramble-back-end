@@ -15,7 +15,7 @@ class ContactInfo{
         contact["name"]=name;
         contact["phone"]=phone;
         contact["email"]=email;
-        contact["platform"]=handle;
+        contact[platform]=handle;
         return contact;
     }
 }
