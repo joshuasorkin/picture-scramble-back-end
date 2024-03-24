@@ -3,12 +3,10 @@ dotenv.config();
 
 class ContactInfo{
     constructor(){
-        this.contactInfo = {
+        this.default = {
             name:process.env.DEFAULT_NAME,
-            methods:{
-                phone:process.env.DEFAULT_PHONE,
-                instagram:process.env.DEFAULT_INSTAGRAM
-              }
+            phone:process.env.DEFAULT_PHONE,
+            instagram:process.env.DEFAULT_INSTAGRAM
         }
     }
 }

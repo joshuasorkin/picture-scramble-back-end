@@ -12,6 +12,7 @@ import ContactInfo from './contact-info.js';
 
 dotenv.config();
 const contactInfo = new ContactInfo();
+console.log(contactInfo.default);
 
 // Configure Multer with a file size limit and memory storage
 const upload = multer({ 
@@ -306,6 +307,7 @@ app.get('/new-game', async (req, res) => {
       else{
         contact = contactInfo.default;
       }
+      console.log({contact});
       const newGame = new Game({
         language: languageParam, 
         solution: word, 
