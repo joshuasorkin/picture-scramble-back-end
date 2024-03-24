@@ -96,7 +96,7 @@ const getRandomWordByLanguage = async (language) => {
   }
 }
 
-async function storeImage(word, url = null, language, buffer = null,uploaded = false) {
+async function storeImage(word, url = null, language, buffer = null,uploaded = false, contact = null) {
   try {
     //allows us to divert input to test collections
     const WordModel = Word;
@@ -151,8 +151,10 @@ async function storeImage(word, url = null, language, buffer = null,uploaded = f
       // If an existing Image document was found, update it (for simplicity, adding to the array)
       imageDoc.images.push(imageBuffer);
     }
-    const newImageIndex = imageDoc.images.length - 1;
-    imageDoc.uploadedIndexes.push(newImageIndex);
+    if(uploaded){
+      const newImageIndex = imageDoc.images.length - 1;
+      imageDoc.uploadedIndexes.push({newImageIndex,contact});
+    }
 
     await imageDoc.save();
     console.log("Image document created with _id:", imageDoc._id); // Output _id of wordDoc
@@ -425,7 +427,7 @@ app.post('/upload', upload.single('image'), async (req, res) => {
       throw new Error("Buffer exceeds the MongoDB document size limit.");
       // Handle the error: perhaps by compressing the image further, splitting it, or using GridFS.
     }
-    const result = await storeImage(word,null,language,buffer,true);
+    const result = await storeImage(word,null,language,buffer,true,contact);
     if (result) {
       res.status(201).send({ message: "image stored" });
     }
