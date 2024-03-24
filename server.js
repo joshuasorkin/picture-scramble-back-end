@@ -284,7 +284,7 @@ app.get('/new-game', async (req, res) => {
       console.log({topicParam});
       const scoreParam = req.query.score ? req.query.score : 0;
       console.log({scoreParam});
-      let wordAndPicture;
+      let wordAndPicture = {};
       /*
       if (topicParam !== undefined){
         wordAndPicture = await OpenAIAPI_obj.generateWordAndPictureUntilSuccess(topicParam)
