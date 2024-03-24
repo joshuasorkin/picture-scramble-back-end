@@ -16,6 +16,13 @@ class ContactInfo{
         contact["phone"]=phone;
         contact["email"]=email;
         contact[platform]=handle;
+
+        // Iterate over the object's properties to trim each value
+        for (let key in contact) {
+            if (typeof contact[key] === 'string') { // Check if the value is a string
+                contact[key] = contact[key].trim();
+            }
+        }
         return contact;
     }
 }
