@@ -7,6 +7,7 @@ import fs from 'fs';
 import fetch from 'node-fetch';
 import multer from 'multer';
 import sharp from 'sharp';
+import crypto from 'crypto';
 dotenv.config();
 
 // Configure Multer with a file size limit and memory storage
@@ -14,6 +15,11 @@ const upload = multer({
   storage: multer.memoryStorage(), 
   limits: { fileSize: 16 * 1024 * 1024 } // 16 MB limit
 });
+
+// Function to return the SHA-256 hash of a given string
+function getSHA256Hash(str) {
+  return crypto.createHash('sha256').update(str).digest('hex');
+}
 
 const wordList = fs.readFileSync(process.env.WORDLIST_FILE,'utf8').split('\n');
 const Schema = mongoose.Schema;
@@ -290,9 +296,11 @@ app.get('/new-game', async (req, res) => {
       const picture = wordAndPicture.picture;
       const compliment = await OpenAIAPI_obj.generateCompliment(word,languageParam);
       const scramble = scramblePhrase(word);
+      const solutionHash = getSHA256Hash(word);
       const newGame = new Game({
         language: languageParam, 
         solution: word, 
+        solutionHash: solutionHash,
         scramble: scramble, 
         picture: picture,
         compliment: compliment,
