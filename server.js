@@ -413,6 +413,11 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     else{
       language = req.body.language;
     }
+    const name = req.body.name;
+    const phone = req.body.phone;
+    const email = req.body.email;
+    const socialMediaPlatform = req.body.socialMediaPlatform;
+    const socialMediaHandle = req.body.socialMediaHandle;
 
     const buffer = await sharp(req.file.buffer).png().toBuffer();
     if (buffer.length > 16 * 1024 * 1024) {
