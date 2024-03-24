@@ -285,21 +285,15 @@ app.get('/new-game', async (req, res) => {
       const scoreParam = req.query.score ? req.query.score : 0;
       console.log({scoreParam});
       let wordAndPicture = {};
-      /*
       if (topicParam !== undefined){
         wordAndPicture = await OpenAIAPI_obj.generateWordAndPictureUntilSuccess(topicParam)
       }
       else{ 
         wordAndPicture = await OpenAIAPI_obj.generateWordAndPictureUntilSuccess(null,scoreParam,languageParam);
       }
-      */
-      wordAndPicture.word = "encrypt";
-      wordAndPicture.picture = null;
-      console.log({wordAndPicture});
       const word = wordAndPicture.word;
       const picture = wordAndPicture.picture;
-      //const compliment = await OpenAIAPI_obj.generateCompliment(word,languageParam);
-      const compliment = "you are a good encrypter";
+      const compliment = await OpenAIAPI_obj.generateCompliment(word,languageParam);
       const scramble = scramblePhrase(word);
       const solutionHash = getSHA256Hash(word);
       const newGame = new Game({
@@ -311,10 +305,8 @@ app.get('/new-game', async (req, res) => {
         compliment: compliment,
         date_create: new Date()
       });
-      //const saveResult = await newGame.save();
-      console.log("date create:",newGame.date_create);
-      console.log({newGame});
-  
+      const saveResult = await newGame.save();
+      console.log("date create:",newGame.date_create);  
       res.send({ gameId: newGame._id, scramble, picture, solutionHash });
     } catch (error) {
       console.error(error);
