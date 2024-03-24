@@ -5,17 +5,11 @@ class ContactInfo{
     constructor(){
         this.contactInfo = {
             name:process.env.DEFAULT_NAME,
-            methods:[
-              {
-                type:"phone",
-                value:process.env.DEFAULT_PHONE
-              },
-              {
-                type:"instagram",
-                value:process.env.DEFAULT_INSTAGRAM
+            methods:{
+                phone:process.env.DEFAULT_PHONE,
+                instagram:process.env.DEFAULT_INSTAGRAM
               }
-            ]
-          }
+        }
     }
 }
 

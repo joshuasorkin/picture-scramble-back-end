@@ -8,7 +8,10 @@ import fetch from 'node-fetch';
 import multer from 'multer';
 import sharp from 'sharp';
 import crypto from 'crypto';
+import ContactInfo from './contact-info.js';
+
 dotenv.config();
+const contactInfo = new ContactInfo();
 
 // Configure Multer with a file size limit and memory storage
 const upload = multer({ 
@@ -296,6 +299,13 @@ app.get('/new-game', async (req, res) => {
       const compliment = await OpenAIAPI_obj.generateCompliment(word,languageParam);
       const scramble = scramblePhrase(word);
       const solutionHash = getSHA256Hash(word);
+      let contact;
+      if(picture.contact){
+        contact = picture.contactInfo;
+      }
+      else{
+        contact = contactInfo.default;
+      }
       const newGame = new Game({
         language: languageParam, 
         solution: word, 
@@ -303,7 +313,8 @@ app.get('/new-game', async (req, res) => {
         scramble: scramble, 
         picture: picture,
         compliment: compliment,
-        date_create: new Date()
+        date_create: new Date(),
+        contactInfo: contactInfo
       });
       const saveResult = await newGame.save();
       console.log("date create:",newGame.date_create);  
