@@ -314,11 +314,11 @@ app.get('/new-game', async (req, res) => {
         picture: picture,
         compliment: compliment,
         date_create: new Date(),
-        contactInfo: contactInfo
+        contact: contact
       });
       const saveResult = await newGame.save();
       console.log("date create:",newGame.date_create);  
-      res.send({ gameId: newGame._id, scramble, picture, solutionHash, compliment });
+      res.send({ gameId: newGame._id, scramble, picture, solutionHash, compliment, contact });
     } catch (error) {
       console.error(error);
       res.status(500).send('Error creating new game');
