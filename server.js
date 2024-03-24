@@ -419,9 +419,6 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     const socialMediaPlatform = req.body.socialMediaPlatform;
     const socialMediaHandle = req.body.socialMediaHandle;
     const contact = contactInfo.createContact(name,phone,email,socialMediaPlatform,socialMediaHandle);
-    console.log({contact});
-    res.status(201).send({ message: "upload ok" });
-    return;
 
     const buffer = await sharp(req.file.buffer).png().toBuffer();
     if (buffer.length > 16 * 1024 * 1024) {
