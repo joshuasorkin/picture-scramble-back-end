@@ -420,6 +420,9 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     const socialMediaHandle = req.body.socialMediaHandle;
     const contact = contactInfo.createContact(name,phone,email,platform,handle);
 
+    res.status(201).send({ message: "upload ok" });
+    return;
+
     const buffer = await sharp(req.file.buffer).png().toBuffer();
     if (buffer.length > 16 * 1024 * 1024) {
       throw new Error("Buffer exceeds the MongoDB document size limit.");
