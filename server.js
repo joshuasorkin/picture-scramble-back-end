@@ -376,7 +376,8 @@ app.get('/image/:word', async (req, res) => {
             console.log("getting uploadedIndex");
             //select a random index from the uploaded indexes
             const randomUploadedIndex = Math.floor(Math.random() * imageDoc.uploadedIndexes.length);
-            randomIndex = imageDoc.uploadedIndexes[randomUploadedIndex];
+            randomIndex = imageDoc.uploadedIndexes[randomUploadedIndex].imageIndex;
+            const contact = imageDoc.uploadedIndexes[randomUploadedIndex].contact
             console.log("random image index from uploadedIndexes:",randomIndex);
           }
           //if no uploaded indexes available, get a random index from the entire images array
@@ -386,8 +387,12 @@ app.get('/image/:word', async (req, res) => {
           }
           // Get the image at the random index
           const imageBuffer = imageDoc.images[randomIndex];
-          res.setHeader('Content-Type', 'image/png');
-          res.send(imageBuffer);
+          const result = {
+            picture:imageBuffer,
+            contact:contact
+          }
+          res.setHeader('Content-Type', 'application/json');
+          res.send(result);
       } else {
           res.status(404).send('No images found for the specified word');
       }
