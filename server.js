@@ -431,10 +431,14 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     const socialMediaHandle = req.body.socialMediaHandle;
     const contact = contactInfo.createContact(name,phone,email,socialMediaPlatform,socialMediaHandle);
     const buffer = await sharp(req.file.buffer).png().toBuffer();
-    if (buffer.length > 16 * 1024 * 1024) {
-      throw new Error("Buffer exceeds the MongoDB document size limit.");
-      // Handle the error: perhaps by compressing the image further, splitting it, or using GridFS.
+    const fileSizeMB = buffer.length / (1024 * 1024); // Convert bytes to MB
+    const maxFileSizeMB = 16; // Maximum file size in MB
+    if (fileSizeMB > maxFileSizeMB) {
+      const errorMesssage = `Error processing request: Your image is ${fileSizeMB.toFixed(2)} MB, maximum size is ${maxFileSizeMB} MB`;
+      return res.status(400).send(errorMesssage);
+      throw new Error("Uploaded image size exceeds MongoDB document limits.");
     }
+    
     console.log({contact});
     console.log("buffer length:",buffer.length);
     res.status(201).send({ message: "payload received" });
