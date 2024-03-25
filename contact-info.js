@@ -10,19 +10,22 @@ class ContactInfo{
         }
     }
 
-    createContact(name,phone,email,platform,handle){
+    createContact(name, phone, email, platform, handle) {
         const contact = {};
-        contact["name"]=name;
-        contact["phone"]=phone;
-        contact["email"]=email;
-        contact[platform]=handle;
-
-        // Iterate over the object's properties to trim each value
-        for (let key in contact) {
-            if (typeof contact[key] === 'string') { // Check if the value is a string
-                contact[key] = contact[key].trim();
+    
+        // Helper function to add non-empty values
+        const addProperty = (key, value) => {
+            if (value !== null && value !== undefined && value.trim() !== '') {
+                contact[key] = value.trim(); // Trim and add if not null/undefined/blank
             }
-        }
+        };
+    
+        // Add properties if they're not null, undefined, or blank
+        addProperty("name", name);
+        addProperty("phone", phone);
+        addProperty("email", email);
+        addProperty(platform, handle);
+    
         return contact;
     }
 }
