@@ -434,7 +434,7 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     const fileSizeMB = buffer.length / (1024 * 1024); // Convert bytes to MB
     const maxFileSizeMB = 16; // Maximum file size in MB
     if (fileSizeMB > maxFileSizeMB) {
-      const errorMesssage = `Error processing request: Your image is ${fileSizeMB.toFixed(2)} MB, maximum size is ${maxFileSizeMB} MB`;
+      const errorMesssage = `Error processing request: When converted to PNG, your image is ${fileSizeMB.toFixed(2)} MB; maximum size is ${maxFileSizeMB} MB.`;
       return res.status(400).send(errorMesssage);
       throw new Error("Uploaded image size exceeds MongoDB document limits.");
     }
