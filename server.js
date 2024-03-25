@@ -368,7 +368,6 @@ app.get('/image/:word', async (req, res) => {
       const ImageModel = ImageTest;
       console.log("retrieving image from server...");
       const word = req.params.word;
-      word=word.trim();
       const wordDoc = await WordModel.findOne({ word: word });
       let contact;
       if (wordDoc && wordDoc.imageRef) {
