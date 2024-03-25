@@ -99,8 +99,8 @@ const getRandomWordByLanguage = async (language) => {
 async function storeImage(word, url = null, language, buffer = null,uploaded = false, contact = null) {
   try {
     //allows us to divert input to test collections
-    const WordModel = Word;
-    const ImageModel = Image;
+    const WordModel = WordTest;
+    const ImageModel = ImageTest;
     console.log("storeImage url:",url);
     let imageBuffer = null;
      // Use fetch to download the image
