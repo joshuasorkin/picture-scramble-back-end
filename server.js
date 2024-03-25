@@ -99,8 +99,8 @@ const getRandomWordByLanguage = async (language) => {
 async function storeImage(word, url = null, language, buffer = null,uploaded = false, contact = null) {
   try {
     //allows us to divert input to test collections
-    const WordModel = WordTest;
-    const ImageModel = ImageTest;
+    const WordModel = Word;
+    const ImageModel = Image;
     console.log("storeImage url:",url);
     let imageBuffer = null;
      // Use fetch to download the image
@@ -294,7 +294,7 @@ const findMismatches = (solution, playerSolution) => {
 app.get('/new-game', async (req, res) => {
     try {
       //allows us to divert input to test collections
-      const GameModel = GameTest;
+      const GameModel = Game;
       console.log("starting new game...");
       const topicParam = req.query.topic;
       let languageParam = req.query.language;
@@ -379,8 +379,8 @@ app.get('/check-game', async (req, res) => {
 app.get('/image/:word', cors(), async (req, res) => {
   try {
       //allows us to divert input to test collections
-      const WordModel = WordTest;
-      const ImageModel = ImageTest;
+      const WordModel = Word;
+      const ImageModel = Image;
       console.log("retrieving image from server...");
       const word = req.params.word;
       const wordDoc = await WordModel.findOne({ word: word });
