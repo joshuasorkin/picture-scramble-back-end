@@ -231,6 +231,19 @@ const gameSchema = new mongoose.Schema({
 });
 const Game = mongoose.model('Game', gameSchema);
 
+// Define the Game model
+const gameTestSchema = new mongoose.Schema({
+  language: String,
+  solution: String,
+  scramble: String,
+  picture: String,
+  date_create: Date,
+  date_solve: Date,
+  topic: String,
+  compliment: String
+});
+const GameTest = mongoose.model('GameTest', gameSchema);
+
 const scramblePhrase = (phrase) => {
   const phraseArray = phrase.split(' ');
   for(let x=0;x<phraseArray.length;x++){
