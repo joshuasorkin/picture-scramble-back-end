@@ -376,7 +376,7 @@ app.get('/check-game', async (req, res) => {
     }
 });
 
-app.get('/image/:word', async (req, res) => {
+app.get('/image/:word', cors(), async (req, res) => {
   try {
       //allows us to divert input to test collections
       const WordModel = WordTest;
@@ -409,6 +409,7 @@ app.get('/image/:word', async (req, res) => {
           const imageBuffer = imageDoc.images[randomIndex];
           if (imageBuffer) {
             const imageBase64 = imageBuffer.toString('base64');
+            console.log("setting response header");
             res.setHeader('Content-Type', 'application/json');
             res.json({
                 image: `data:image/png;base64,${imageBase64}`,
