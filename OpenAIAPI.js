@@ -16,6 +16,13 @@ class OpenAIAPI {
   }
 
   async generateWordAndPictureUntilSuccess(wordParam = null,score,language){
+    const wordTest = 'boundary';
+    return {
+      word:wordTest,
+      picture:process.env.BASE_URL+`/image/${wordTest}`
+    }
+
+
     console.log("starting generation");
     console.log({score});
     let success = false;
