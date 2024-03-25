@@ -363,11 +363,14 @@ app.get('/check-game', async (req, res) => {
 
 app.get('/image/:word', async (req, res) => {
   try {
+      //allows us to divert input to test collections
+      const WordModel = WordTest;
+      const ImageModel = ImageTest;
       console.log("retrieving image from server...");
       const word = req.params.word;
-      const wordDoc = await Word.findOne({ word: word });
+      const wordDoc = await WordModel.findOne({ word: word });
       if (wordDoc && wordDoc.imageRef) {
-          const imageDoc = await Image.findById(wordDoc.imageRef);
+          const imageDoc = await ImageModel.findById(wordDoc.imageRef);
           console.log("image count:",imageDoc.images.length);
           let randomIndex;
           // Generate a random index
