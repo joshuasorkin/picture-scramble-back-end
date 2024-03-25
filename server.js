@@ -387,12 +387,15 @@ app.get('/image/:word', async (req, res) => {
           }
           // Get the image at the random index
           const imageBuffer = imageDoc.images[randomIndex];
-          const result = {
-            picture:imageBuffer,
-            contact:contact
+          if (imageBuffer) {
+            const imageBase64 = imageBuffer.toString('base64');
+            res.json({
+                image: `data:image/png;base64,${imageBase64}`,
+                contact: contact,
+            });
+          } else {
+              res.status(404).send('No images found for the specified word');
           }
-          res.setHeader('Content-Type', 'application/json');
-          res.send(result);
       } else {
           res.status(404).send('No images found for the specified word');
       }
