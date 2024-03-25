@@ -439,11 +439,6 @@ app.post('/upload', upload.single('image'), async (req, res) => {
       throw new Error("Uploaded image size exceeds MongoDB document limits.");
     }
     
-    console.log({contact});
-    console.log("buffer length:",buffer.length);
-    res.status(201).send({ message: "payload received" });
-    return;
-
     const result = await storeImage(word,null,language,buffer,true,contact);
     if (result) {
       res.status(201).send({ message: "image stored" });
