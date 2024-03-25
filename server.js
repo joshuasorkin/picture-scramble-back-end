@@ -293,6 +293,8 @@ const findMismatches = (solution, playerSolution) => {
 
 app.get('/new-game', async (req, res) => {
     try {
+      //allows us to divert input to test collections
+      const GameModel = GameTest;
       console.log("starting new game...");
       const topicParam = req.query.topic;
       let languageParam = req.query.language;
@@ -322,7 +324,7 @@ app.get('/new-game', async (req, res) => {
         contact = contactInfo.default;
       }
       console.log({contact});
-      const newGame = new Game({
+      const newGame = new GameModel({
         language: languageParam, 
         solution: word, 
         solutionHash: solutionHash,
