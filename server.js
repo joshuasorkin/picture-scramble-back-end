@@ -409,6 +409,7 @@ app.get('/image/:word', async (req, res) => {
           const imageBuffer = imageDoc.images[randomIndex];
           if (imageBuffer) {
             const imageBase64 = imageBuffer.toString('base64');
+            res.setHeader('Content-Type', 'application/json');
             res.json({
                 image: `data:image/png;base64,${imageBase64}`,
                 contact: contact,
