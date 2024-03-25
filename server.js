@@ -369,6 +369,7 @@ app.get('/image/:word', async (req, res) => {
       console.log("retrieving image from server...");
       const word = req.params.word;
       const wordDoc = await WordModel.findOne({ word: word });
+      let contact;
       if (wordDoc && wordDoc.imageRef) {
           const imageDoc = await ImageModel.findById(wordDoc.imageRef);
           console.log("image count:",imageDoc.images.length);
@@ -380,7 +381,7 @@ app.get('/image/:word', async (req, res) => {
             //select a random index from the uploaded indexes
             const randomUploadedIndex = Math.floor(Math.random() * imageDoc.uploadedIndexes.length);
             randomIndex = imageDoc.uploadedIndexes[randomUploadedIndex].imageIndex;
-            const contact = imageDoc.uploadedIndexes[randomUploadedIndex].contact
+            contact = imageDoc.uploadedIndexes[randomUploadedIndex].contact
             console.log("random image index from uploadedIndexes:",randomIndex);
             console.log({contact});
           }
