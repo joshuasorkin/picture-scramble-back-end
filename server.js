@@ -379,6 +379,7 @@ app.get('/image/:word', async (req, res) => {
             randomIndex = imageDoc.uploadedIndexes[randomUploadedIndex].imageIndex;
             const contact = imageDoc.uploadedIndexes[randomUploadedIndex].contact
             console.log("random image index from uploadedIndexes:",randomIndex);
+            console.log({contact});
           }
           //if no uploaded indexes available, get a random index from the entire images array
           else{
@@ -429,6 +430,9 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     const socialMediaPlatform = req.body.socialMediaPlatform;
     const socialMediaHandle = req.body.socialMediaHandle;
     const contact = contactInfo.createContact(name,phone,email,socialMediaPlatform,socialMediaHandle);
+    console.log({contact});
+    res.status(201).send({ message: "payload received" });
+    return;
 
     const buffer = await sharp(req.file.buffer).png().toBuffer();
     if (buffer.length > 16 * 1024 * 1024) {
