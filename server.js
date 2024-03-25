@@ -368,6 +368,7 @@ app.get('/image/:word', async (req, res) => {
       const ImageModel = ImageTest;
       console.log("retrieving image from server...");
       const word = req.params.word;
+      word=word.trim();
       const wordDoc = await WordModel.findOne({ word: word });
       let contact;
       if (wordDoc && wordDoc.imageRef) {
@@ -399,10 +400,10 @@ app.get('/image/:word', async (req, res) => {
                 contact: contact,
             });
           } else {
-              res.status(404).send('No images found for the specified word');
+              res.status(404).send(`No images found for '${word}'`);
           }
       } else {
-          res.status(404).send('No images found for the specified word');
+          res.status(404).send(`No images found for '${word}'`);
       }
   } catch (err) {
       console.error('Error:', err);
