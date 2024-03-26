@@ -64,6 +64,10 @@ const imageTestSchema = new Schema({
   wordRef: { type: Schema.Types.ObjectId, ref: 'WordTest' }
 });
 
+//use for switching collections for test/production
+const WordModel = Word;
+const ImageModel = Image;
+const GameModel = Game;
 
 
 
