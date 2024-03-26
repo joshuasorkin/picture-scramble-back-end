@@ -25,6 +25,10 @@ function getSHA256Hash(str) {
 }
 
 const wordList = fs.readFileSync(process.env.WORDLIST_FILE,'utf8').split('\n');
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
 const Schema = mongoose.Schema;
 
 // Define a schema for the word_images collection
@@ -90,18 +94,17 @@ const gameTestSchema = new mongoose.Schema({
 });
 const GameTest = mongoose.model('GameTest', gameSchema);
 
-
-//use for switching collections for test/production
-const WordModel = Word;
-const ImageModel = Image;
-const GameModel = Game;
-
 // Create a model based on the schema
 const WordImage = mongoose.model('WordImage', wordImageSchema);
 const Word = mongoose.model('Word', wordSchema);
 const Image = mongoose.model('Image', imageSchema);
 const WordTest = mongoose.model('WordTest', wordTestSchema);
 const ImageTest = mongoose.model('ImageTest', imageTestSchema);
+
+//use for switching collections for test/production
+const WordModel = Word;
+const ImageModel = Image;
+const GameModel = Game;
 
 const getRandomWordByLanguage = async (language) => {
   console.log("looking for random word in",language);
@@ -240,9 +243,6 @@ const app = express();
 app.use(express.json());
 
 app.use(cors());
-
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const scramblePhrase = (phrase) => {
   const phraseArray = phrase.split(' ');
