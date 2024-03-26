@@ -102,9 +102,9 @@ const WordTest = mongoose.model('WordTest', wordTestSchema);
 const ImageTest = mongoose.model('ImageTest', imageTestSchema);
 
 //use for switching collections for test/production
-const WordModel = WordTest;
-const ImageModel = ImageTest;
-const GameModel = GameTest;
+const WordModel = Word;
+const ImageModel = Image;
+const GameModel = Game;
 
 const getRandomWordByLanguage = async (language) => {
   console.log("looking for random word in",language);
