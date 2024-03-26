@@ -388,12 +388,23 @@ app.get('/image/:word', cors(), async (req, res) => {
           // Start by looking for uploaded image indexes
           if (imageDoc.uploadedIndexes && imageDoc.uploadedIndexes.length > 0){
             console.log("getting uploadedIndex");
+            const uploadedIndexes = imageDoc.uploadedIndexes;
+            console.log({uploadedIndexes});
             //select a random index from the uploaded indexes
             const randomUploadedIndex = Math.floor(Math.random() * imageDoc.uploadedIndexes.length);
-            randomIndex = imageDoc.uploadedIndexes[randomUploadedIndex].imageIndex;
-            contact = imageDoc.uploadedIndexes[randomUploadedIndex].contact
-            console.log("random image index from uploadedIndexes:",randomIndex);
-            console.log({contact});
+            const uploadedIndexValue = imageDoc.uploadedIndexes[randomUploadedIndex];
+            //check if it's one of the new format uploadedIndexes arrays of objects
+            if (typeof uploadedIndexValue === 'object' && uploadedIndexValue !== null){
+              randomIndex = imageDoc.uploadedIndexes[randomUploadedIndex].imageIndex;
+              contact = imageDoc.uploadedIndexes[randomUploadedIndex].contact;
+              console.log("random image index from uploadedIndexes:",randomIndex);
+              console.log({contact});
+            }
+            //if it's just an array of integer indexes
+            else{
+              randomIndex = uploadedIndexValue;
+            }
+          
           }
           //if no uploaded indexes available, get a random index from the entire images array
           else{
