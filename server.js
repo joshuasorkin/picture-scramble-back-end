@@ -64,12 +64,37 @@ const imageTestSchema = new Schema({
   wordRef: { type: Schema.Types.ObjectId, ref: 'WordTest' }
 });
 
+// Define the Game model
+const gameSchema = new mongoose.Schema({
+  language: String,
+  solution: String,
+  scramble: String,
+  picture: String,
+  date_create: Date,
+  date_solve: Date,
+  topic: String,
+  compliment: String
+});
+const Game = mongoose.model('Game', gameSchema);
+
+// Define the Game model
+const gameTestSchema = new mongoose.Schema({
+  language: String,
+  solution: String,
+  scramble: String,
+  picture: String,
+  date_create: Date,
+  date_solve: Date,
+  topic: String,
+  compliment: String
+});
+const GameTest = mongoose.model('GameTest', gameSchema);
+
+
 //use for switching collections for test/production
 const WordModel = Word;
 const ImageModel = Image;
 const GameModel = Game;
-
-
 
 // Create a model based on the schema
 const WordImage = mongoose.model('WordImage', wordImageSchema);
@@ -82,7 +107,7 @@ const getRandomWordByLanguage = async (language) => {
   console.log("looking for random word in",language);
   try {
     // Using the aggregation framework to randomly sample documents
-    const randomWordDoc = await Word.aggregate([
+    const randomWordDoc = await WordModel.aggregate([
       { $match: { language: language } },
       { $sample: { size: 1 } }
     ]);
@@ -102,9 +127,6 @@ const getRandomWordByLanguage = async (language) => {
 
 async function storeImage(word, url = null, language, buffer = null,uploaded = false, contact = null) {
   try {
-    //allows us to divert input to test collections
-    const WordModel = Word;
-    const ImageModel = Image;
     console.log("storeImage url:",url);
     let imageBuffer = null;
      // Use fetch to download the image
@@ -176,7 +198,7 @@ async function storeImage(word, url = null, language, buffer = null,uploaded = f
 
 const findExistingPicture = async (word) => {
   try {
-    const wordDoc = await Word.findOne({ word: word });
+    const wordDoc = await WordModel.findOne({ word: word });
 
     if (!wordDoc || !wordDoc.imageRef) {
       console.log("No existing image found");
@@ -194,7 +216,7 @@ const findExistingPicture = async (word) => {
 const wordGeneratedToday = async (word) => {
   const twentyFourHoursAgo = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
 
-  const recentGames = await Game.find({
+  const recentGames = await GameModel.find({
       solution: word,
       date_create: {
           $gte: twentyFourHoursAgo
@@ -221,32 +243,6 @@ app.use(cors());
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-
-// Define the Game model
-const gameSchema = new mongoose.Schema({
-  language: String,
-  solution: String,
-  scramble: String,
-  picture: String,
-  date_create: Date,
-  date_solve: Date,
-  topic: String,
-  compliment: String
-});
-const Game = mongoose.model('Game', gameSchema);
-
-// Define the Game model
-const gameTestSchema = new mongoose.Schema({
-  language: String,
-  solution: String,
-  scramble: String,
-  picture: String,
-  date_create: Date,
-  date_solve: Date,
-  topic: String,
-  compliment: String
-});
-const GameTest = mongoose.model('GameTest', gameSchema);
 
 const scramblePhrase = (phrase) => {
   const phraseArray = phrase.split(' ');
@@ -297,8 +293,6 @@ const findMismatches = (solution, playerSolution) => {
 
 app.get('/new-game', async (req, res) => {
     try {
-      //allows us to divert input to test collections
-      const GameModel = Game;
       console.log("starting new game...");
       const topicParam = req.query.topic;
       let languageParam = req.query.language;
@@ -351,7 +345,7 @@ app.get('/check-game', async (req, res) => {
     const { gameId, playerSolution } = req.query;
     console.log({playerSolution});
     try {
-      const game = await Game.findById(gameId);
+      const game = await GameModel.findById(gameId);
       console.log({game});
       if (!game) {
         res.status(404).send('Game not found');
@@ -382,9 +376,6 @@ app.get('/check-game', async (req, res) => {
 
 app.get('/image/:word', cors(), async (req, res) => {
   try {
-      //allows us to divert input to test collections
-      const WordModel = Word;
-      const ImageModel = Image;
       console.log("retrieving image from server...");
       const word = req.params.word;
       const wordDoc = await WordModel.findOne({ word: word });
